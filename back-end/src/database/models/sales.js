@@ -1,10 +1,10 @@
 const associations = (models) => {
-  models.Sales.belongsToMany(
-    models.Users, {
+  models.sales.belongsTo(
+    models.users, {
       as: 'users',
       foreignKey: 'user_id',
     },
-    models.Users, {
+    models.users, {
       as: 'users',
       foreignKey: 'seller_id',
     },
