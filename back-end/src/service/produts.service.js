@@ -1,6 +1,6 @@
 const { products } = require('../database/models');
 
-const allProduts = async () => {
+const allProdutService = async () => {
   try {
     const productsAll = await products.findAll();
     return productsAll;
@@ -9,7 +9,7 @@ const allProduts = async () => {
   }
 };
 
-const productsById = async (id) => {
+const productsByIdService = async (id) => {
   try {
     const product = await products.findOne({ where: { id } });
     return product;
@@ -18,7 +18,28 @@ const productsById = async (id) => {
   }
 };
 
+const editProductService = async (id, test, value) => {
+  try {
+    const productEdited = await products.update({ test: value }, { where: { id } });
+    console.log(productEdited);
+    return productEdited;
+  } catch (e) {
+    throw new Error(e);
+  }
+};
+
+const deleteProductService = async (id) => {
+  try {
+    const delProd = await products.findOne({ where: { id } });
+    await delProd.destroy();
+  } catch (e) {
+    throw new Error(e);
+  }
+};
+
 module.exports = {
-  allProduts,
-  productsById,
+  allProdutService,
+  productsByIdService,
+  editProductService,
+  deleteProductService,
 }; 
