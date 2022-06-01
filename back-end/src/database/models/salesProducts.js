@@ -1,10 +1,10 @@
 const associations = (models) => {
-  models.SalesProducts.belongsTo(
-    models.Products, {
+  models.salesProducts.belongsTo(
+    models.products, {
       as: 'products',
       foreignKey: 'product_id',
     },
-    models.Sales, {
+    models.sales, {
       as: 'sales',
       foreignKey: 'sale_id',
     },
@@ -21,5 +21,5 @@ module.exports = (sequelize, DataTypes) => {
   });
   SalesProducts.associate = associations;
   
-  return Sales;
+  return SalesProducts;
 };

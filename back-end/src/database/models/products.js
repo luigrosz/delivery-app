@@ -1,3 +1,4 @@
+
 module.exports = (sequelize, DataTypes) => {
   const Products = sequelize.define('products', {
     name: DataTypes.STRING,
@@ -8,7 +9,6 @@ module.exports = (sequelize, DataTypes) => {
     tableName: 'products',
     timestamps: false,
   });
-  Products.associate = associations;
   
   return Products;
 };
