@@ -8,7 +8,7 @@ router.post(
   '/',
   validateEmail,
   validatePassword,
-  post
+  post,
 );
 
 module.exports = router;

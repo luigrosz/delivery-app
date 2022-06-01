@@ -1,5 +1,5 @@
-const loginService = require( '../service/login.service');
-const jwtGenerator = require('../helpers/jwtGenerator.js');
+const loginService = require('../service/login.service');
+const jwtGenerator = require('../helpers/jwtGenerator');
 
 const post = async (req, res, _next) => {
   try {
@@ -15,7 +15,7 @@ const post = async (req, res, _next) => {
     const { name } = isUserInDatabase;
     return res.status(200).json({ email, name, token });
   } catch (e) { 
-    console.log(e)
+    console.log(e);
   }
 };
 
