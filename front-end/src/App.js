@@ -2,13 +2,14 @@ import React from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import './App.css';
 import rockGlass from './images/rockGlass.svg';
+import Login from './pages/login';
 
 function App() {
   return (
     <div className="App">
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={ <div>Login</div> } />
+          <Route path="/" element={ <Login /> } />
           <Route path="/login" element={ <div>Login</div> } />
           <Route path="/signin" element={ <div>Signin</div> } />
           <Route path="/products" element={ <div>Products</div> } />

@@ -55,9 +55,5 @@
       "__TESTFILE__": true
     }
   },
-  "dependencies": {
-    "@mui/material": "^5.8.2",
-    "@mui/styled-engine-sc": "^5.8.0",
-    "styled-components": "^5.3.5"
-  }
+  "dependencies": {}
 }
