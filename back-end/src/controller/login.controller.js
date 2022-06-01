@@ -12,8 +12,8 @@ const post = async (req, res, _next) => {
     }
     
     const token = jwtGenerator({ email, password });
-    const { name } = isUserInDatabase;
-    return res.status(200).json({ email, name, token });
+    const { name, role } = isUserInDatabase;
+    return res.status(200).json({ email, name, role, token });
   } catch (e) { 
     console.log(e);
   }
