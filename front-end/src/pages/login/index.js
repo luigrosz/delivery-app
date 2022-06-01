@@ -40,7 +40,9 @@ const Login = () => {
             label="Email"
             value={ email }
             onChange={ handleEmailChange }
-            data-testid="common_login__input-email"
+            inputProps={ {
+              'data-testid': 'common_login__input-email',
+            } }
           />
         </Grid>
         <Grid item xs={ 10 }>
@@ -52,7 +54,9 @@ const Login = () => {
             id="password"
             value={ password }
             onChange={ handlePasswordChange }
-            data-testid="common_login__input-password"
+            inputProps={ {
+              'data-testid': 'common_login__input-password',
+            } }
           />
         </Grid>
         <Grid item xs={ 10 } paddingBottom={ 1 } paddingTop={ 3 }>
@@ -60,7 +64,6 @@ const Login = () => {
             fullWidth
             type="submit"
             variant="contained"
-            margin="normal"
             disabled={ disabled }
             data-testid="common_login__button-login"
           >
@@ -72,7 +75,6 @@ const Login = () => {
             fullWidth
             type="submit"
             variant="outlined"
-            margin="normal"
             data-testid="common_login__button-register"
           >
             Ainda não tenho Conta
