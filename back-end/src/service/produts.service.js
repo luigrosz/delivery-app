@@ -18,9 +18,9 @@ const productsByIdService = async (id) => {
   }
 };
 
-const editProductService = async (id, test, value) => {
+const editProductService = async (id, obj) => {
   try {
-    const productEdited = await products.update({ test: value }, { where: { id } });
+    const productEdited = await products.update(obj, { where: { id } });
     console.log(productEdited);
     return productEdited;
   } catch (e) {

@@ -26,9 +26,9 @@ const productByIdController = async (req, res, _next) => {
 const editProdController = async (req, res, _next) => {
   try {
     const { id } = req.params;
-    const { test, value } = req.body;
-    const editProd = await editProductService(id, test, value);
-    return res.status(204).json(editProd);
+    const { edit } = req.body;
+    const editProduct = await editProductService(id, edit);
+    return res.status(204).json(editProduct);
   } catch (e) {
     throw new Error(e);
   }
