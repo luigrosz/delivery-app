@@ -6,6 +6,7 @@ const signinUserToDB = async (email, password, name) => {
     await users.findOne({ where: { email } });
     const md5Password = md5(password);
     const created = await users.create({ name, email, password: md5Password, role: 'customer' });
+    
     return created;
   } catch (e) { 
     return { error: 'Email is already on Database' };
