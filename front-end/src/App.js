@@ -3,6 +3,7 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import './App.css';
 import rockGlass from './images/rockGlass.svg';
 import Login from './pages/login';
+import Signin from './pages/signin';
 
 function App() {
   return (
@@ -11,7 +12,7 @@ function App() {
         <Routes>
           <Route path="/" element={ <Login /> } />
           <Route path="/login" element={ <Login /> } />
-          <Route path="/signin" element={ <div>Signin</div> } />
+          <Route path="/register" element={ <Signin /> } />
           <Route path="/products" element={ <div>Products</div> } />
           <Route
             path="/loading"

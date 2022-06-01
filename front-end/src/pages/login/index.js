@@ -1,8 +1,10 @@
 import React, { useEffect } from 'react';
-import { Button, Grid, Paper, TextField } from '@mui/material';
+import { Button, Grid, Paper, TextField, Typography } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
 
 const Login = () => {
   const [email, setEmail] = React.useState('');
+  const navigate = useNavigate();
   const [disabled, setDisabled] = React.useState(true);
   const [password, setPassword] = React.useState('');
 
@@ -29,59 +31,80 @@ const Login = () => {
   });
 
   return (
-    <Paper style={ { width: '20%' } }>
-      <Grid container xs={ 12 } style={ { justifyContent: 'space-evenly' } }>
-        <Grid item xs={ 10 }>
-          <TextField
-            fullWidth
-            margin="normal"
-            required
-            id="email"
-            label="Email"
-            value={ email }
-            onChange={ handleEmailChange }
-            inputProps={ {
-              'data-testid': 'common_login__input-email',
-            } }
-          />
-        </Grid>
-        <Grid item xs={ 10 }>
-          <TextField
-            fullWidth
-            required
-            label="Password"
-            type="password"
-            id="password"
-            value={ password }
-            onChange={ handlePasswordChange }
-            inputProps={ {
-              'data-testid': 'common_login__input-password',
-            } }
-          />
-        </Grid>
-        <Grid item xs={ 10 } paddingBottom={ 1 } paddingTop={ 3 }>
-          <Button
-            fullWidth
-            type="submit"
-            variant="contained"
-            disabled={ disabled }
-            data-testid="common_login__button-login"
-          >
-            Login
-          </Button>
-        </Grid>
-        <Grid item xs={ 10 } paddingBottom={ 2 }>
-          <Button
-            fullWidth
-            type="submit"
-            variant="outlined"
-            data-testid="common_login__button-register"
-          >
-            Ainda não tenho Conta
-          </Button>
-        </Grid>
+    <Grid
+      container
+      component="main"
+      sx={ {
+        height: '50vh',
+        display: 'flex',
+        justifyContent: 'center',
+      } }
+    >
+      <Grid
+        item
+        xs={ 10 }
+        sm={ 7 }
+        md={ 5 }
+        lg={ 5 }
+        xl={ 4 }
+        component={ Paper }
+        sx={ {
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+        } }
+      >
+        <Typography component="h1" variant="h5" sx={ { mb: 3, mt: 2 } }>
+          Login
+        </Typography>
+        <TextField
+          fullWidth
+          margin="normal"
+          required
+          id="email"
+          label="Email"
+          value={ email }
+          onChange={ handleEmailChange }
+          sx={ { width: '60%', mb: 1 } }
+          inputProps={ {
+            'data-testid': 'common_login__input-email',
+          } }
+        />
+        <TextField
+          fullWidth
+          required
+          label="Password"
+          type="password"
+          id="password"
+          value={ password }
+          onChange={ handlePasswordChange }
+          sx={ { width: '60%', mb: 1 } }
+          inputProps={ {
+            'data-testid': 'common_login__input-password',
+          } }
+        />
+        <Button
+          fullWidth
+          type="submit"
+          variant="contained"
+          disabled={ disabled }
+          sx={ { mt: 8, mb: 2, width: '60%' } }
+          data-testid="common_login__button-login"
+        >
+          Login
+        </Button>
+        <Button
+          fullWidth
+          type="submit"
+          variant="outlined"
+          onClick={ () => navigate('/register') }
+          sx={ { mt: 8, mb: 2, width: '60%' } }
+          data-testid="common_login__button-register"
+        >
+          Ainda não tenho Conta
+        </Button>
       </Grid>
-    </Paper>
+    </Grid>
   );
 };
 
