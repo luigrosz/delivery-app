@@ -1,7 +1,6 @@
 const validatePassword = async (req, res, next) => {
   try {
     const { password } = req.body;
-
     if (password.length > 5) {
       return next();
     }

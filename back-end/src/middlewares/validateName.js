@@ -1,7 +1,6 @@
 const validateName = async (req, res, next) => {
   try {
     const { name } = req.body;
-
     if (name.length > 11) {
       return next();
     }

@@ -21,7 +21,6 @@ const productsByIdService = async (id) => {
 const editProductService = async (id, obj) => {
   try {
     const productEdited = await products.update(obj, { where: { id } });
-    console.log(productEdited);
     return productEdited;
   } catch (e) {
     throw new Error(e);
