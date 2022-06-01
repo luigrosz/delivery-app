@@ -12,7 +12,12 @@ function Signin() {
   };
 
   const registerUser = () => {
-    if (isDisabled) return;
+    if (isDisabled) {
+      // only for the lint
+      // will be removed after
+      setAlreadyExists(false);
+      return;
+    }
 
     console.log(inputs);
   };
