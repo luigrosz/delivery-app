@@ -18,9 +18,9 @@ const Login = () => {
     const minPasswordLength = 6;
     if (re.test(email) && password.length >= minPasswordLength) {
       setDisabled(false);
-    } else {
-      setDisabled(true);
+      return;
     }
+    setDisabled(true);
   };
 
   const inputsHandler = ({ target: { name, value } }) => {
