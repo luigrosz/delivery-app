@@ -1,14 +1,13 @@
 const express = require('express');
-const post = require('../controller/login.controller');
+const { loginController } = require('../controller/user.controller');
 const { validateEmail, validatePassword } = require('../middlewares');
 
 const router = express.Router();
-
 router.post(
   '/',
   validateEmail,
   validatePassword,
-  post,
+  loginController,
 );
 
-module.exports = router;
+module.exports = router; 
