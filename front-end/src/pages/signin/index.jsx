@@ -1,25 +1,50 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import {
-  Box, Button, FormHelperText, Grid, Paper, TextField, Typography } from '@mui/material';
+  Alert,
+  Box, Button, Grid, Paper, Snackbar, TextField, Typography } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
+import { context } from '../../context';
 
 function Signin() {
+  const { APIURL, setUser } = useContext(context);
+  const navigate = useNavigate();
   const [isDisabled, setIsDisabled] = useState(false);
   const [alreadyExists, setAlreadyExists] = useState(false);
   const [inputs, setInputs] = useState({ email: '', name: '', password: '' });
 
   const inputsHandler = ({ target: { name, value } }) => {
+    if (alreadyExists) {
+      setAlreadyExists(false);
+    }
     setInputs({ ...inputs, [name]: value });
   };
 
-  const registerUser = () => {
-    if (isDisabled) {
-      // only for the lint
-      // will be removed after
-      setAlreadyExists(false);
+  const handleClose = (e, reason) => {
+    if (reason === 'clickaway') {
       return;
     }
+    setAlreadyExists(false);
+  };
 
-    console.log(inputs);
+  const registerUser = async () => {
+    const { email, password, name } = inputs;
+    const response = await fetch(`${APIURL}/register`,
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          email, password, name,
+        }),
+      });
+    const notUniqueEmail = 400; // talvez mude depois
+    if (response.status === notUniqueEmail) {
+      return setAlreadyExists(true);
+    }
+    const data = await response.json();
+    setUser(data);
+    navigate('/customer/products');
   };
 
   useEffect(() => {
@@ -102,16 +127,21 @@ function Signin() {
           >
             Sign In
           </Button>
-          {(alreadyExists) && (
-            <FormHelperText
-              error
-              inputProps={ {
-                'data-testid': 'common_register__element-invalid_register',
-              } }
+          <Snackbar
+            open={ alreadyExists }
+            autoHideDuration={ 6000 }
+            onClose={ handleClose }
+            anchorOrigin={ { horizontal: 'center', vertical: 'top' } }
+          >
+            <Alert
+              onClose={ handleClose }
+              severity="error"
+              sx={ { width: '100%' } }
+              data-testid="common_register__element-invalid_register"
             >
-              Email already registered
-            </FormHelperText>
-          )}
+              Quer roubar email dos outros é? ahn?
+            </Alert>
+          </Snackbar>
         </Box>
       </Grid>
       <Grid

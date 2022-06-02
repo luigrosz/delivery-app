@@ -1,14 +1,19 @@
-import React, { useEffect } from 'react';
-import { Button, Grid, Paper, TextField, Typography } from '@mui/material';
+import React, { useEffect, useState, useContext } from 'react';
+import {
+  Alert, Button, Grid, Paper, Snackbar, TextField, Typography,
+} from '@mui/material';
 import { useNavigate } from 'react-router-dom';
+import { context } from '../../context';
 
 const Login = () => {
-  const [email, setEmail] = React.useState('');
+  const { APIURL, setUser } = useContext(context);
   const navigate = useNavigate();
-  const [disabled, setDisabled] = React.useState(true);
-  const [password, setPassword] = React.useState('');
+  const [disabled, setDisabled] = useState(true);
+  const [invalidEmail, setInvalidEmail] = useState(false);
+  const [inputs, setInputs] = useState({ email: '', password: '' });
 
   const handleDisabled = () => {
+    const { email, password } = inputs;
     const re = /\S+@\S+\.\S+/;
     const minPasswordLength = 6;
     if (re.test(email) && password.length >= minPasswordLength) {
@@ -18,17 +23,41 @@ const Login = () => {
     }
   };
 
-  const handleEmailChange = ({ target: { value } }) => {
-    setEmail(value);
-  };
-
-  const handlePasswordChange = ({ target: { value } }) => {
-    setPassword(value);
+  const inputsHandler = ({ target: { name, value } }) => {
+    setInputs({ ...inputs, [name]: value });
   };
 
   useEffect(() => {
     handleDisabled();
-  });
+  }, [inputs]);
+
+  const logUser = async () => {
+    const { email, password } = inputs;
+    const notFound = 404;
+    const response = await fetch(`${APIURL}/login`,
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          email, password,
+        }),
+      });
+    if (response.status === notFound) {
+      return setInvalidEmail(true);
+    }
+    const data = await response.json();
+    setUser(data);
+    navigate(`/${data.role}/products`);
+  };
+
+  const handleClose = (e, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+    setInvalidEmail(false);
+  };
 
   return (
     <Grid
@@ -42,12 +71,11 @@ const Login = () => {
     >
       <Grid
         item
-        xs={ 10 }
-        sm={ 7 }
-        md={ 5 }
-        lg={ 5 }
-        xl={ 4 }
         component={ Paper }
+        xs={ 12 }
+        sm={ 6 }
+        md={ 4 }
+        xl={ 3 }
         sx={ {
           display: 'flex',
           flexDirection: 'column',
@@ -55,7 +83,7 @@ const Login = () => {
         } }
       >
         <Typography component="h1" variant="h5" sx={ { mb: 3, mt: 2 } }>
-          Login
+          Entrar
         </Typography>
         <TextField
           fullWidth
@@ -63,9 +91,11 @@ const Login = () => {
           required
           id="email"
           label="Email"
-          value={ email }
-          onChange={ handleEmailChange }
-          sx={ { width: '60%', mb: 1 } }
+          name="email"
+          error={ invalidEmail }
+          value={ inputs.email }
+          onChange={ inputsHandler }
+          sx={ { width: '80%', mb: 1 } }
           inputProps={ {
             'data-testid': 'common_login__input-email',
           } }
@@ -73,12 +103,13 @@ const Login = () => {
         <TextField
           fullWidth
           required
-          label="Password"
+          label="Senha"
           type="password"
           id="password"
-          value={ password }
-          onChange={ handlePasswordChange }
-          sx={ { width: '60%', mb: 1 } }
+          name="password"
+          value={ inputs.password }
+          onChange={ inputsHandler }
+          sx={ { width: '80%', mb: 1 } }
           inputProps={ {
             'data-testid': 'common_login__input-password',
           } }
@@ -89,20 +120,39 @@ const Login = () => {
           variant="contained"
           disabled={ disabled }
           sx={ { mt: 8, mb: 2, width: '60%' } }
+          onClick={ logUser }
           data-testid="common_login__button-login"
         >
-          Login
+          Entrar
         </Button>
+        <Typography component="h2" variant="h6" sx={ { mb: 1, mt: 4 } }>
+          Não possui conta?
+        </Typography>
         <Button
           fullWidth
           type="submit"
           variant="outlined"
           onClick={ () => navigate('/register') }
-          sx={ { mt: 8, mb: 2, width: '60%' } }
+          sx={ { mt: 0, mb: 2, width: '60%' } }
           data-testid="common_login__button-register"
         >
-          Ainda não tenho Conta
+          Registre-se
         </Button>
+        <Snackbar
+          open={ invalidEmail }
+          autoHideDuration={ 6000 }
+          onClose={ handleClose }
+          anchorOrigin={ { horizontal: 'center', vertical: 'top' } }
+        >
+          <Alert
+            onClose={ handleClose }
+            severity="error"
+            sx={ { width: '100%' } }
+            data-testid="common_login__element-invalid-email"
+          >
+            Email não está registrado!
+          </Alert>
+        </Snackbar>
       </Grid>
     </Grid>
   );
