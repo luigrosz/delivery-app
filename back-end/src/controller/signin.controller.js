@@ -6,7 +6,7 @@ const post = async (req, res, _next) => {
     const { name, email, password } = req.body;
     const result = await signinUserToDB(email, password, name);
     if ('error' in result) {
-      return res.status(400).json(result);
+      return res.status(409).json(result);
     }
     const token = jwtGenerator({ email, password });
     const { role } = result;
