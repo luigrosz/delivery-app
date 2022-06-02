@@ -8,7 +8,7 @@ const Provider = ({ children }) => {
   const hostname = process.env.REACT_APP_HOSTNAME;
   const port = process.env.REACT_APP_BACKEND_PORT;
   const APIURL = `http://${hostname}:${port}`;
-  useEffect(() => {
+  /* useEffect(() => {
     if (user?.token) {
       localStorage.setItem('user', JSON.stringify(user));
     }
@@ -19,7 +19,7 @@ const Provider = ({ children }) => {
     if (savedUser) {
       setUser(JSON.parse(savedUser));
     }
-  }, []);
+  }, []); */
   const value = useMemo(() => ({
     APIURL,
     user,
