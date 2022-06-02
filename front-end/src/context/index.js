@@ -4,12 +4,12 @@ import PropTypes from 'prop-types';
 export const context = createContext(null);
 
 const Provider = ({ children }) => {
-  const [user, setUser] = useState({});
+  const [user, setUser] = useState({ });
   const hostname = process.env.REACT_APP_HOSTNAME || 'localhost';
   const port = process.env.REACT_APP_BACKEND_PORT || '3001';
   const APIURL = `http://${hostname}:${port}`;
   useEffect(() => {
-    if (user?.token) {
+    if (user.token) {
       localStorage.setItem('user', JSON.stringify(user));
     }
   }, [user]);
