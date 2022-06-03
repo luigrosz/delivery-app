@@ -1,18 +1,29 @@
-import React, { createContext, useEffect, useMemo, useState } from 'react';
+import React, { createContext, useCallback, useEffect, useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
 
 export const context = createContext(null);
 
 const Provider = ({ children }) => {
   const [user, setUser] = useState({ });
+  const [products, setProducts] = useState([]);
   const hostname = process.env.REACT_APP_HOSTNAME || 'localhost';
   const port = process.env.REACT_APP_BACKEND_PORT || '3001';
   const APIURL = `http://${hostname}:${port}`;
+
+  const fetchProducts = useCallback(async () => {
+    const response = await fetch(`${APIURL}/product`);
+    if (response.ok) {
+      const data = await response.json();
+      setProducts(data);
+    }
+  }, [APIURL]);
+
   useEffect(() => {
     if (user.token) {
       localStorage.setItem('user', JSON.stringify(user));
+      fetchProducts();
     }
-  }, [user]);
+  }, [user, fetchProducts]);
 
   useEffect(() => {
     const savedUser = localStorage.getItem('user');
@@ -24,7 +35,9 @@ const Provider = ({ children }) => {
     APIURL,
     user,
     setUser,
-  }), [user, APIURL]);
+    products,
+    setProducts,
+  }), [user, APIURL, products]);
   return (
     <context.Provider value={ value }>
       { children }
