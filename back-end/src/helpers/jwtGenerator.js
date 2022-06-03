@@ -1,9 +1,10 @@
 const jwt = require('jsonwebtoken');
+const fs = require('fs');
 
 const jwtConfig = {
   expiresIn: '1d',
 };
 
-const SECRET = 'p!$rj$XMXLkfG54N5jyPXEs!VYEGXP#8kz$5PcMaYb';
+const key = fs.readFileSync(`${process.cwd()}/jwt.evaluation.key`, 'utf8');
 
-module.exports = (data = {}) => jwt.sign({ data }, SECRET, jwtConfig); 
+module.exports = (data = {}) => jwt.sign({ data }, key, jwtConfig); 
