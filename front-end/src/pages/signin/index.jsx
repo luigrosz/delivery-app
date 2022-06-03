@@ -129,7 +129,7 @@ function Signin() {
           </Button>
           <Snackbar
             open={ alreadyExists }
-            autoHideDuration={ 6000 }
+            autoHideDuration={ 60000 }
             onClose={ handleClose }
             anchorOrigin={ { horizontal: 'center', vertical: 'top' } }
           >
