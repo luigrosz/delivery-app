@@ -13,11 +13,11 @@ const associations = (models) => {
 
 module.exports = (sequelize, DataTypes) => {
   const Sales = sequelize.define('sales', {
-    totalPrice: DataTypes.DECIMAL(9,2),
-    deliveryAddress: DataTypes.STRING,
-    deliveryNumber: DataTypes.STRING,
+    total_price: DataTypes.DECIMAL(9,2),
+    delivery_address: DataTypes.STRING,
+    delivery_number: DataTypes.STRING,
     status: DataTypes.STRING,
-    saleDate: {
+    sale_date: {
       type: DataTypes.DATE,
     },
   }, {
@@ -26,6 +26,5 @@ module.exports = (sequelize, DataTypes) => {
     timestamps: false,
   });
   Sales.associate = associations;
-  
   return Sales;
 };
