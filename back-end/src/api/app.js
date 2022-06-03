@@ -6,9 +6,8 @@ const app = express();
 
 app.use(express.json());
 
-// torna a pasta de imagens publica
-const publicDirectory = path.join(__dirname, '../../public');
-app.use(express.static(publicDirectory));
+// // torna a pasta de imagens publica
+app.use(express.static(`${process.cwd()}/public`));
 
 app.use(cors());
 app.use(routes);
