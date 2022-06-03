@@ -1,4 +1,4 @@
-const { loginService, registerService } = require('../service/user.service');
+const { loginService, registerService, allSellersService } = require('../service/user.service');
 const jwtGenerator = require('../helpers/jwtGenerator');
 
 const loginController = async (req, res, _next) => {
@@ -34,4 +34,13 @@ const registerController = async (req, res, _next) => {
   }
 };
 
-module.exports = { loginController, registerController };
+const getAllSellers = async (_req, res, _next) => {
+  try {
+    const sellers = await allSellersService();
+    return res.status(200).json(sellers);
+  } catch (e) {
+    throw new Error(e);
+  }
+};
+
+module.exports = { loginController, registerController, getAllSellers };

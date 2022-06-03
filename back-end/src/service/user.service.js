@@ -22,4 +22,13 @@ const registerService = async (email, password, name) => {
   }
 };
 
-module.exports = { registerService, loginService }; 
+const allSellersService = async () => {
+  try {
+    const sellers = await users.findAll({ where: { role: 'seller' } });
+    return sellers;
+  } catch (e) {
+    throw new Error(e);
+  }
+};
+
+module.exports = { registerService, loginService, allSellersService }; 
