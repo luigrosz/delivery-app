@@ -4,6 +4,7 @@ import './App.css';
 import Provider from './context';
 import rockGlass from './images/rockGlass.svg';
 import Login from './pages/login';
+import Products from './pages/products';
 import Signin from './pages/signin';
 
 function App() {
@@ -15,7 +16,7 @@ function App() {
             <Route path="/" element={ <Navigate replace to="/login" /> } />
             <Route path="/login" element={ <Login /> } />
             <Route path="/register" element={ <Signin /> } />
-            <Route path="/customer/products" element={ <div>Products</div> } />
+            <Route path="/customer/products" element={ <Products /> } />
             <Route
               path="/loading"
               element={
