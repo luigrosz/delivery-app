@@ -18,7 +18,7 @@ function App() {
             path="/"
             element={
               <>
-                <Navigate replace to="/login" />
+                <Navigate to="/login" />
                 <Login />
               </>
             }
