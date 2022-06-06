@@ -14,7 +14,15 @@ function App() {
     <Provider>
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={ <Navigate replace to="/login" /> } />
+          <Route
+            path="/"
+            element={
+              <>
+                <Navigate replace to="/login" />
+                <Login />
+              </>
+            }
+          />
           <Route path="/login" element={ <Login /> } />
           <Route path="/register" element={ <Signin /> } />
           <Route path="/customer" element={ <NavBar /> }>
