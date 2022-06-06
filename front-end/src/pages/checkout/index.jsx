@@ -18,7 +18,7 @@ function Checkout() {
   const { products, setProducts, sellers } = useContext(context);
   const [page, setPage] = useState(0);
   const [inputs, setInputs] = useState({
-    sellerId: sellers[0].id, deliveryAddress: '', deliveryNumber: '' });
+    sellerId: sellers[0]?.id, deliveryAddress: '', deliveryNumber: '' });
   const [rowsPerPage, setRowsPerPage] = React.useState(minColP);
   const rowsPerPageOption = [minColP, medColP, maxColP];
   const filtered = products.reduce((acc, p) => {
@@ -147,7 +147,7 @@ function Checkout() {
             } }
             required
             label="Vendedor Responsável"
-            data-testid="customer_checkout__select-seller"
+            inputProps={ { 'data-testid': 'customer_checkout__select-seller' } }
             onChange={ handleInputChange }
             name="sellerId"
             value={ inputs.sellerId }
@@ -161,22 +161,18 @@ function Checkout() {
             } }
             required
             label="Endereço"
-            data-testid="customer_checkout__input-address"
+            inputProps={ { 'data-testid': 'customer_checkout__input-address' } }
             onChange={ handleInputChange }
             name="deliveryAddres"
             value={ inputs.deliveryAddres }
           />
           <TextField
             label="Numero"
-            id="outlined-start-adornment"
             sx={ {
               width: '13%',
             } }
             required
-            InputProps={ {
-              startAdornment: <InputAdornment position="start">N°:</InputAdornment>,
-            } }
-            data-testid="customer_checkout__input-addressNumber"
+            inputProps={ { 'data-testid': 'customer_checkout__input-addressNumber' } }
             onChange={ handleInputChange }
             name="deliveryNumber"
             value={ inputs.deliveryNumber }

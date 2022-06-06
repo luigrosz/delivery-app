@@ -5,7 +5,7 @@ export const context = createContext(null);
 
 const Provider = ({ children }) => {
   const [user, setUser] = useState({ });
-  const [sellers, setSellers] = useState({});
+  const [sellers, setSellers] = useState([]);
   const [products, setProducts] = useState([]);
   const [totalPrice, setTotalPrice] = useState(0);
   const hostname = process.env.REACT_APP_HOSTNAME || 'localhost';
