@@ -7,9 +7,9 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import PropTypes from 'prop-types';
+import { Button } from '@mui/material';
 
-function CheckoutTable({ filtered, page, rowsPerPage }) {
-
+function CheckoutTable({ filtered, page, rowsPerPage, handleRemove }) {
   const createDataTest = (testid, id) => `${testid}${id}`;
 
   return (
@@ -97,12 +97,17 @@ function CheckoutTable({ filtered, page, rowsPerPage }) {
                 </TableCell>
                 <TableCell
                   align="right"
-                  data-testid={ createDataTest(
-                    'customer_checkout__element-order-table-remove-',
-                    prod.id,
-                  ) }
                 >
-                  remove Item
+                  <Button
+                    variant="outlined"
+                    onClick={ () => handleRemove(prod.id) }
+                    data-testid={ createDataTest(
+                      'customer_checkout__element-order-table-remove-',
+                      prod.id,
+                    ) }
+                  >
+                    Remover Item
+                  </Button>
                 </TableCell>
               </TableRow>
             ))}
@@ -123,6 +128,7 @@ CheckoutTable.propTypes = {
     }),
   ).isRequired,
   page: PropTypes.number.isRequired,
+  handleRemove: PropTypes.func.isRequired,
   rowsPerPage: PropTypes.number.isRequired,
 };
 
