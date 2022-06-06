@@ -2,7 +2,8 @@ const express = require('express');
 const {
   getAllProductsController,
   productByIdController,
-  postProdController,
+  // deleted?
+  //postProdController,
   editProdController,
   delprodController,
 } = require('../controller/products.controller');
@@ -13,7 +14,8 @@ router.get('/', getAllProductsController);
 
 router.put('/:id', editProdController);
 
-router.post('/', postProdController);
+//was breaking the node
+//router.post('/', postProdController);
 
 router.get('/:id', productByIdController);
 
