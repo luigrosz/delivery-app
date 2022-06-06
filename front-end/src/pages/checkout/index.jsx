@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import { TablePagination, TextField, Typography } from '@mui/material';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
@@ -10,52 +10,24 @@ import Paper from '@mui/material/Paper';
 import { context } from '../../context';
 import CheckoutTable from './CheckoutTable';
 
-const mChecklist = [
-  {
-    itemNumber: 1,
-    quantity: 2,
-  },
-  {
-    itemNumber: 2,
-    quantity: 5,
-  },
-  {
-    itemNumber: 3,
-    quantity: 5,
-  },
-  {
-    itemNumber: 4,
-    quantity: 5,
-  },
-  {
-    itemNumber: 5,
-    quantity: 5,
-  },
-  {
-    itemNumber: 6,
-    quantity: 5,
-  },
-];
-
 const minColP = 11;
 const medColP = 15;
 const maxColP = 20;
 
 function Checkout() {
-  const [page, setPage] = React.useState(0);
+  const { products, setProducts, sellers } = useContext(context);
+  const [page, setPage] = useState(0);
+  const [inputs, setInputs] = useState({
+    sellerId: sellers[0].id, deliveryAddres: '', deliveryNumber: '' });
   const [rowsPerPage, setRowsPerPage] = React.useState(minColP);
-  const { products } = useContext(context);
   const rowsPerPageOption = [minColP, medColP, maxColP];
   const filtered = products.reduce((acc, p) => {
-    let newP = {};
-    const foundItem = mChecklist.find(({ itemNumber }) => itemNumber === +p.id);
-    if (foundItem) {
-      newP = { ...p, price: parseFloat(p.price), quantity: foundItem.quantity };
+    if (p?.quantity) {
+      const newP = { ...p, price: parseFloat(p.price) };
       return [...acc, newP];
     }
     return acc;
   }, []);
-  console.log(filtered);
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -66,7 +38,45 @@ function Checkout() {
     setPage(0);
   };
 
-  const calcTotal = () => filtered.reduce((acc, f) => acc + (f.price * f.quantity), 0);
+  const handleRemove = (id) => {
+    setProducts((prevProd) => prevProd.map((p) => {
+      if (p.id === id) {
+        return { ...p, quantity: 0 };
+      }
+      return p;
+    }));
+  };
+
+  const handleInputChange = ({ target: { value, name } }) => {
+    if (name === 'deliveryNumber' && !(+value)) {
+      return;
+    }
+    setInputs((prevInput) => ({ ...prevInput, [name]: value }));
+  };
+
+  const calcTotal = () => filtered.reduce(
+    (acc, f) => acc + (f.price * f.quantity), 0,
+  ).toFixed(2);
+
+  const sendOrder = async () => {
+    const body = {
+      ...inputs,
+      totalPrice: calcTotal(),
+      products: products.filter((p) => p?.quantity),
+    };
+    console.log(body);
+    /* await fetch(`${APIURL}/sale`, {
+      headers: {
+        'Content-type': 'application/json',
+        Authorization: user.token
+      },
+      body: {
+        ...inputs,
+        totalPrice: calcTotal(),
+        products: products.filter((p) => p?.quantity),
+      }
+    }) */
+  };
 
   return (
     <Grid
@@ -90,6 +100,7 @@ function Checkout() {
         filtered={ filtered }
         page={ page }
         rowsPerPage={ rowsPerPage }
+        handleRemove={ handleRemove }
       />
       <TablePagination
         labelRowsPerPage="N° de colunas"
@@ -137,9 +148,12 @@ function Checkout() {
             required
             label="Vendedor Responsável"
             data-testid="customer_checkout__select-seller"
+            onChange={ handleInputChange }
+            name="sellerId"
+            value={ inputs.sellerId }
           >
-            <MenuItem value="a">Aaaa</MenuItem>
-            <MenuItem>Aaaa</MenuItem>
+            {sellers.map((seller) => (
+              <MenuItem key={ seller.id } value={ seller.id }>{seller.name}</MenuItem>))}
           </TextField>
           <TextField
             sx={ {
@@ -148,6 +162,9 @@ function Checkout() {
             required
             label="Endereço"
             data-testid="customer_checkout__input-address"
+            onChange={ handleInputChange }
+            name="deliveryAddres"
+            value={ inputs.deliveryAddres }
           />
           <TextField
             label="Numero"
@@ -160,6 +177,9 @@ function Checkout() {
               startAdornment: <InputAdornment position="start">N°:</InputAdornment>,
             } }
             data-testid="customer_checkout__input-addressNumber"
+            onChange={ handleInputChange }
+            name="deliveryNumber"
+            value={ inputs.deliveryNumber }
           />
         </Box>
         <Button
@@ -168,6 +188,7 @@ function Checkout() {
             mb: 2,
           } }
           data-testid="customer_checkout__button-submit-order"
+          onClick={ sendOrder }
         >
           Finalizar Pedido
         </Button>
