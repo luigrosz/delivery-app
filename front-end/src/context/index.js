@@ -5,6 +5,7 @@ export const context = createContext(null);
 
 const Provider = ({ children }) => {
   const [user, setUser] = useState({ });
+  const [sellers, setSellers] = useState({});
   const [products, setProducts] = useState([]);
   const [totalPrice, setTotalPrice] = useState(0);
   const hostname = process.env.REACT_APP_HOSTNAME || 'localhost';
@@ -24,6 +25,19 @@ const Provider = ({ children }) => {
     }
   }, [APIURL]);
 
+  const fetchSellers = useCallback(async () => {
+    const response = await fetch(`${APIURL}/seller`, {
+      headers: {
+        token: user.token,
+      },
+    });
+    if (response.ok) {
+      const data = await response.json();
+      console.log(data);
+      setSellers(data);
+    }
+  }, [APIURL, user]);
+
   useEffect(() => {
     const total = products.reduce((acc, product) => {
       if (product?.quantity) {
@@ -38,8 +52,9 @@ const Provider = ({ children }) => {
     if (user.token) {
       localStorage.setItem('user', JSON.stringify(user));
       fetchProducts();
+      fetchSellers();
     }
-  }, [user, fetchProducts]);
+  }, [user, fetchProducts, fetchSellers]);
 
   useEffect(() => {
     const savedUser = localStorage.getItem('user');
@@ -54,7 +69,8 @@ const Provider = ({ children }) => {
     products,
     setProducts,
     totalPrice,
-  }), [user, APIURL, products, totalPrice]);
+    sellers,
+  }), [user, APIURL, products, totalPrice, sellers]);
   return (
     <context.Provider value={ value }>
       { children }
