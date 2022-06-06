@@ -18,7 +18,7 @@ function Checkout() {
   const { products, setProducts, sellers } = useContext(context);
   const [page, setPage] = useState(0);
   const [inputs, setInputs] = useState({
-    sellerId: sellers[0].id, deliveryAddres: '', deliveryNumber: '' });
+    sellerId: sellers[0].id, deliveryAddress: '', deliveryNumber: '' });
   const [rowsPerPage, setRowsPerPage] = React.useState(minColP);
   const rowsPerPageOption = [minColP, medColP, maxColP];
   const filtered = products.reduce((acc, p) => {
