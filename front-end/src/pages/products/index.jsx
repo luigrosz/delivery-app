@@ -1,7 +1,6 @@
 import { Button, Typography } from '@mui/material';
 import React, { useContext, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import NavBar from '../../components/navBar';
 import ProductCard from '../../components/productCard';
 import { context } from '../../context';
 
