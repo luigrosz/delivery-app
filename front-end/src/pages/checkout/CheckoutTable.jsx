@@ -46,13 +46,13 @@ function CheckoutTable({ filtered, page, rowsPerPage, handleRemove }) {
         <TableBody>
           {filtered
             .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-            .map((prod) => (
-              <TableRow tabIndex={ -1 } key={ prod.id }>
+            .map((prod, index) => (
+              <TableRow key={ prod.id }>
                 <TableCell
                   align="left"
                   data-testid={ createDataTest(
                     'customer_checkout__element-order-table-item-number-',
-                    prod.id,
+                    index,
                   ) }
                 >
                   { prod.id }
@@ -61,7 +61,7 @@ function CheckoutTable({ filtered, page, rowsPerPage, handleRemove }) {
                   align="center"
                   data-testid={ createDataTest(
                     'customer_checkout__element-order-table-name-',
-                    prod.id,
+                    index,
                   ) }
                 >
                   { prod.name }
@@ -70,7 +70,7 @@ function CheckoutTable({ filtered, page, rowsPerPage, handleRemove }) {
                   align="right"
                   data-testid={ createDataTest(
                     'customer_checkout__element-order-table-quantity-',
-                    prod.id,
+                    index,
                   ) }
 
                 >
@@ -80,7 +80,7 @@ function CheckoutTable({ filtered, page, rowsPerPage, handleRemove }) {
                   align="right"
                   data-testid={ createDataTest(
                     'customer_checkout__element-order-table-unit-price-',
-                    prod.id,
+                    index,
                   ) }
 
                 >
@@ -90,7 +90,7 @@ function CheckoutTable({ filtered, page, rowsPerPage, handleRemove }) {
                   align="right"
                   data-testid={ createDataTest(
                     'customer_checkout__element-order-table-sub-total-',
-                    prod.id,
+                    index,
                   ) }
                 >
                   { (prod.price * prod.quantity).toFixed(2) }
@@ -103,7 +103,7 @@ function CheckoutTable({ filtered, page, rowsPerPage, handleRemove }) {
                     onClick={ () => handleRemove(prod.id) }
                     data-testid={ createDataTest(
                       'customer_checkout__element-order-table-remove-',
-                      prod.id,
+                      index,
                     ) }
                   >
                     Remover Item
