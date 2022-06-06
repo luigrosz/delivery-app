@@ -64,14 +64,20 @@ function ProductCard({ id, name, price, urlImage }) {
           size="small"
           variant="outlined"
           icon={ <AttachMoneyIcon /> }
-          label={ price }
+          label={ price.toString().replace('.', ',') }
           sx={ {
             position: 'absolute',
             top: '3%',
             left: '3%',
           } }
+          data-testid={ `customer_products__element-card-price-${id}` }
         />
-        <img style={ { height: '200px' } } src={ urlImage } alt={ name } />
+        <img
+          style={ { height: '200px' } }
+          src={ urlImage }
+          alt={ name }
+          data-testid={ `customer_products__img-card-bg-image-${id}` }
+        />
       </CardMedia>
       <Divider />
       <CardContent
@@ -79,7 +85,10 @@ function ProductCard({ id, name, price, urlImage }) {
           backgroundColor: '#e5e5e5',
         } }
       >
-        <Typography align="center">
+        <Typography
+          align="center"
+          data-testid={ `customer_products__element-card-title-${id}` }
+        >
           { name }
         </Typography>
         <Container
@@ -95,6 +104,7 @@ function ProductCard({ id, name, price, urlImage }) {
               minWidth: '30px',
             } }
             onClick={ () => handleInc('minus') }
+            data-testid={ `customer_products__button-card-rm-item-${id}` }
           >
             <RemoveIcon />
           </IconButton>
@@ -102,6 +112,7 @@ function ProductCard({ id, name, price, urlImage }) {
             variant="standard"
             inputProps={ {
               style: { textAlign: 'center' },
+              'data-testid': `customer_products__input-card-quantity-${id}`,
             } }
             value={ quantity }
             onChange={ handleQnt }
@@ -116,7 +127,7 @@ function ProductCard({ id, name, price, urlImage }) {
               minWidth: '30px',
             } }
             onClick={ () => handleInc('plus') }
-
+            data-testid={ `customer_products__button-card-add-item-${id}` }
           >
             <AddIcon />
           </IconButton>

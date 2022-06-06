@@ -6,6 +6,7 @@ export const context = createContext(null);
 const Provider = ({ children }) => {
   const [user, setUser] = useState({ });
   const [products, setProducts] = useState([]);
+  const [totalPrice, setTotalPrice] = useState(0);
   const hostname = process.env.REACT_APP_HOSTNAME || 'localhost';
   const port = process.env.REACT_APP_BACKEND_PORT || '3001';
   const APIURL = `http://${hostname}:${port}`;
@@ -14,9 +15,24 @@ const Provider = ({ children }) => {
     const response = await fetch(`${APIURL}/product`);
     if (response.ok) {
       const data = await response.json();
-      setProducts(data);
+      const newD = data.map((product) => {
+        const newP = { ...product, urlImage: product.url_image };
+        delete newP.url_image;
+        return newP;
+      });
+      setProducts(newD);
     }
   }, [APIURL]);
+
+  useEffect(() => {
+    const total = products.reduce((acc, product) => {
+      if (product?.quantity) {
+        return acc + (product.price * product.quantity);
+      }
+      return acc;
+    }, 0);
+    setTotalPrice(parseFloat(total).toFixed(2));
+  }, [products]);
 
   useEffect(() => {
     if (user.token) {
@@ -37,7 +53,8 @@ const Provider = ({ children }) => {
     setUser,
     products,
     setProducts,
-  }), [user, APIURL, products]);
+    totalPrice,
+  }), [user, APIURL, products, totalPrice]);
   return (
     <context.Provider value={ value }>
       { children }
