@@ -22,7 +22,6 @@ const Products = () => {
 
   return (
     <>
-      <NavBar />
       <div
         style={ {
           display: 'flex',
