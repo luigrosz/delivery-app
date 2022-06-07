@@ -15,12 +15,7 @@ const Provider = ({ children }) => {
     const response = await fetch(`${APIURL}/product`);
     if (response.ok) {
       const data = await response.json();
-      const newD = data.map((product) => {
-        const newP = { ...product, urlImage: product.url_image };
-        delete newP.url_image;
-        return newP;
-      });
-      setProducts(newD);
+      setProducts(data);
     }
   }, [APIURL]);
 
