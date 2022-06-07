@@ -1,10 +1,9 @@
 import React, { useContext, useState } from 'react';
-import { TablePagination, TextField, Typography } from '@mui/material';
+import { Select, TablePagination, TextField, Typography } from '@mui/material';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
-import MenuItem from '@mui/material/MenuItem';
 import Paper from '@mui/material/Paper';
 import { context } from '../../context';
 import CheckoutTable from './CheckoutTable';
@@ -55,7 +54,7 @@ function Checkout() {
 
   const calcTotal = () => filtered.reduce(
     (acc, f) => acc + (f.price * f.quantity), 0,
-  ).toFixed(2);
+  ).toFixed(2).toString().replace('.', ',');
 
   const sendOrder = async () => {
     const body = {
@@ -139,8 +138,9 @@ function Checkout() {
             justifyContent: 'space-around',
           } }
         >
-          <TextField
-            select
+
+          <Select
+            native
             sx={ {
               width: '20%',
             } }
@@ -152,8 +152,8 @@ function Checkout() {
             value={ inputs.sellerId }
           >
             {sellers.map((seller) => (
-              <MenuItem key={ seller.id } value={ seller.id }>{seller.name}</MenuItem>))}
-          </TextField>
+              <option key={ seller.id } value={ seller.id }>{seller.name}</option>))}
+          </Select>
           <TextField
             sx={ {
               width: '50%',

@@ -84,7 +84,7 @@ function CheckoutTable({ filtered, page, rowsPerPage, handleRemove }) {
                   ) }
 
                 >
-                  { prod.price.toFixed(2) }
+                  { prod.price.toFixed(2).toString().replace('.', ',') }
                 </TableCell>
                 <TableCell
                   align="right"
@@ -93,7 +93,7 @@ function CheckoutTable({ filtered, page, rowsPerPage, handleRemove }) {
                     index,
                   ) }
                 >
-                  { (prod.price * prod.quantity).toFixed(2) }
+                  { (prod.price * prod.quantity).toFixed(2).toString().replace('.', ',') }
                 </TableCell>
                 <TableCell
                   align="right"
