@@ -13,19 +13,12 @@ const medColP = 15;
 const maxColP = 20;
 
 function Checkout() {
-  const { products, setProducts, sellers } = useContext(context);
+  const { cart, setCart, sellers } = useContext(context);
   const [page, setPage] = useState(0);
   const [inputs, setInputs] = useState({
     sellerId: sellers[0]?.id, deliveryAddress: '', deliveryNumber: '' });
-  const [rowsPerPage, setRowsPerPage] = React.useState(minColP);
+  const [rowsPerPage, setRowsPerPage] = useState(minColP);
   const rowsPerPageOption = [minColP, medColP, maxColP];
-  const filtered = products.reduce((acc, p) => {
-    if (p?.quantity) {
-      const newP = { ...p, price: parseFloat(p.price) };
-      return [...acc, newP];
-    }
-    return acc;
-  }, []);
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -37,12 +30,7 @@ function Checkout() {
   };
 
   const handleRemove = (id) => {
-    setProducts((prevProd) => prevProd.map((p) => {
-      if (p.id === id) {
-        return { ...p, quantity: 0 };
-      }
-      return p;
-    }));
+    setCart((prevCart) => prevCart.filter((p) => p.id !== id));
   };
 
   const handleInputChange = ({ target: { value, name } }) => {
@@ -52,7 +40,7 @@ function Checkout() {
     setInputs((prevInput) => ({ ...prevInput, [name]: value }));
   };
 
-  const calcTotal = () => filtered.reduce(
+  const calcTotal = () => cart.reduce(
     (acc, f) => acc + (f.price * f.quantity), 0,
   ).toFixed(2).toString().replace('.', ',');
 
@@ -60,7 +48,7 @@ function Checkout() {
     const body = {
       ...inputs,
       totalPrice: calcTotal(),
-      products: products.filter((p) => p?.quantity),
+      products: cart,
     };
     console.log(body);
     /* await fetch(`${APIURL}/sale`, {
@@ -95,7 +83,7 @@ function Checkout() {
         Finalizar Pedido
       </Typography>
       <CheckoutTable
-        filtered={ filtered }
+        filtered={ cart }
         page={ page }
         rowsPerPage={ rowsPerPage }
         handleRemove={ handleRemove }
@@ -104,7 +92,7 @@ function Checkout() {
         labelRowsPerPage="N° de colunas"
         rowsPerPageOptions={ rowsPerPageOption }
         component="div"
-        count={ filtered.length }
+        count={ cart.length }
         rowsPerPage={ rowsPerPage }
         page={ page }
         onPageChange={ handleChangePage }

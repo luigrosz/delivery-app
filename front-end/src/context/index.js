@@ -7,6 +7,7 @@ const Provider = ({ children }) => {
   const [user, setUser] = useState({ });
   const [sellers, setSellers] = useState([]);
   const [products, setProducts] = useState([]);
+  const [cart, setCart] = useState([]);
   const [totalPrice, setTotalPrice] = useState(0);
   const hostname = process.env.REACT_APP_HOSTNAME || 'localhost';
   const port = process.env.REACT_APP_BACKEND_PORT || '3001';
@@ -34,14 +35,9 @@ const Provider = ({ children }) => {
   }, [APIURL, user]);
 
   useEffect(() => {
-    const total = products.reduce((acc, product) => {
-      if (product?.quantity) {
-        return acc + (product.price * product.quantity);
-      }
-      return acc;
-    }, 0);
+    const total = cart.reduce((acc, item) => acc + (item.quantity * (+item.price)), 0)
     setTotalPrice(parseFloat(total).toFixed(2));
-  }, [products]);
+  }, [cart]);
 
   useEffect(() => {
     if (user.token) {
@@ -65,7 +61,9 @@ const Provider = ({ children }) => {
     setProducts,
     totalPrice,
     sellers,
-  }), [user, APIURL, products, totalPrice, sellers]);
+    cart,
+    setCart,
+  }), [user, APIURL, products, totalPrice, sellers, cart]);
   return (
     <context.Provider value={ value }>
       { children }
