@@ -2,7 +2,13 @@ const md5 = require('md5');
 const { QueryTypes } = require('sequelize');
 const db = require('../database/models');
 const { users, sales } = require('../database/models');
-const { postSaleQuery, now, postSalesProductQuery, noChecks } = require('../helpers/dbHelper');
+const { postSaleQuery,
+  now,
+  postSalesProductQuery,
+  noChecks,
+  userIdSnake,
+  sellerIdSnake,
+} = require('../helpers/dbHelper');
 
 async function createSalesProductsInDb(productsArr, saleId) {
   const productsPromise = productsArr.map((product) => {
@@ -26,11 +32,12 @@ const postSaleService = async (params, user) => {
     await db.sequelize.query(noChecks, { type: QueryTypes.UPDATE });
     const saleQuery = await db.sequelize.query(postSaleQuery, {
       replacements: [id, sellerId, totalPrice, deliveryAddress, deliveryNumber, now],
-      type: QueryTypes.INSERT });
+      type: QueryTypes.INSERT,
+    });
 
     const saleId = saleQuery[0];
     await createSalesProductsInDb(products, saleId);
-    
+
     const result = {
       userId: id, sellerId, totalPrice, deliveryAddress, deliveryNumber, products,
     };
@@ -47,24 +54,29 @@ const getAllSalesService = async () => {
   } catch (error) {
     throw new Error(error);
   }
-}
+};
 
 const getSaleByIdSellerService = async (id) => {
   try {
-    const saleObject = await sales.findOne({ where : {seller_id: id } })
+    const saleObject = await sales.findOne({ where: { [sellerIdSnake]: id } });
     return saleObject;
   } catch (error) {
     throw new Error(error);
   }
-}
+};
 
 const getSaleByIdUserService = async (id) => {
   try {
-    const saleObject = await sales.findOne({ where : {user_id: id } })
+    const saleObject = await sales.findOne({ where: { [userIdSnake]: id } });
     return saleObject;
   } catch (error) {
     throw new Error(error);
   }
-}
+};
 
-module.exports = { postSaleService, getAllSalesService, getSaleByIdUserService, getSaleByIdSellerService };
+module.exports = {
+  postSaleService,
+  getAllSalesService,
+  getSaleByIdUserService,
+  getSaleByIdSellerService,
+};
