@@ -35,7 +35,7 @@ const Provider = ({ children }) => {
   }, [APIURL, user]);
 
   useEffect(() => {
-    const total = cart.reduce((acc, item) => acc + (item.quantity * (+item.price)), 0)
+    const total = cart.reduce((acc, item) => acc + (item.quantity * (+item.price)), 0);
     setTotalPrice(parseFloat(total).toFixed(2));
   }, [cart]);
 
