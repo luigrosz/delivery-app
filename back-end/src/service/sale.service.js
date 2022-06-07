@@ -1,7 +1,7 @@
 const md5 = require('md5');
 const { QueryTypes } = require('sequelize');
 const db = require('../database/models');
-const { users } = require('../database/models');
+const { users, sales } = require('../database/models');
 const { postSaleQuery, now, postSalesProductQuery, noChecks } = require('../helpers/dbHelper');
 
 async function createSalesProductsInDb(productsArr, saleId) {
@@ -40,4 +40,31 @@ const postSaleService = async (params, user) => {
   }
 };
 
-module.exports = postSaleService;
+const getAllSalesService = async () => {
+  try {
+    const saleObject = await sales.findAll();
+    return saleObject;
+  } catch (error) {
+    throw new Error(error);
+  }
+}
+
+const getSaleByIdSellerService = async (id) => {
+  try {
+    const saleObject = await sales.findOne({ where : {seller_id: id } })
+    return saleObject;
+  } catch (error) {
+    throw new Error(error);
+  }
+}
+
+const getSaleByIdUserService = async (id) => {
+  try {
+    const saleObject = await sales.findOne({ where : {user_id: id } })
+    return saleObject;
+  } catch (error) {
+    throw new Error(error);
+  }
+}
+
+module.exports = { postSaleService, getAllSalesService, getSaleByIdUserService, getSaleByIdSellerService };

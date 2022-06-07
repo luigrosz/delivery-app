@@ -1,9 +1,12 @@
 const express = require('express');
-const postSaleController = require('../controller/sales.controller');
-const { validateJWT } = require('../middlewares');
+const { postSaleController, getAllSalesController, getSaleByIdSellerController, getSaleByIdUserController } = require('../controller/sales.controller');
+const { validateJWT, validateObjects } = require('../middlewares');
 
 const router = express.Router();
 
-router.post('/', validateJWT, postSaleController);
+router.get('/', validateJWT, getAllSalesController);
+router.get('/user/:id', validateJWT, getSaleByIdUserController);
+router.get('/seller/:id', validateJWT, getSaleByIdSellerController);
+router.post('/', validateObjects, validateJWT,  postSaleController);
 
 module.exports = router;
