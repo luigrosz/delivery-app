@@ -23,24 +23,37 @@ async function createSalesProductsInDb(productsArr, saleId) {
   return result;
 }
 
+async function createSaleInDb(params, id) {
+  const { sellerId, totalPrice, deliveryAddress, deliveryNumber, products } = params;
+  await db.sequelize.query(noChecks, { type: QueryTypes.UPDATE });
+
+  const saleQuery = await db.sequelize.query(postSaleQuery, {
+    replacements: [id, sellerId, +totalPrice.replace(',', '.'),
+      deliveryAddress, +deliveryNumber, now],
+    type: QueryTypes.INSERT,
+  });
+
+  const result = {
+    userId: id,
+    saleId: saleQuery[0],
+    sellerId,
+    totalPrice,
+    deliveryAddress,
+    deliveryNumber,
+    products,
+  };
+  return result;
+}
+
 const postSaleService = async (params, user) => {
   try {
-    const { sellerId, totalPrice, deliveryAddress, deliveryNumber, products } = params;
+    const { products } = params;
     const { email, password } = user;
     const { id } = await users.findOne({ where: { email, password: md5(password) } });
 
-    await db.sequelize.query(noChecks, { type: QueryTypes.UPDATE });
-    const saleQuery = await db.sequelize.query(postSaleQuery, {
-      replacements: [id, sellerId, +totalPrice.replace(',', '.'), deliveryAddress, +deliveryNumber, now],
-      type: QueryTypes.INSERT,
-    });
+    const result = await createSaleInDb(params, id);
+    await createSalesProductsInDb(products, result.saleId);
 
-    const saleId = saleQuery[0];
-    await createSalesProductsInDb(products, saleId);
-
-    const result = {
-      userId: id, saleId, sellerId, totalPrice, deliveryAddress, deliveryNumber, products, 
-    };
     return result;
   } catch (error) {
     throw new Error(error);
@@ -81,7 +94,7 @@ const getSaleByIdSaleService = async (id) => {
   } catch (e) {
     throw new Error(e);
   }
-}
+};
 
 module.exports = {
   postSaleService,

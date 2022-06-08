@@ -59,7 +59,7 @@ const getSaleByIdSaleController = async (req, res, _next) => {
   } catch (e) {
     throw new Error(e);
   }
-}
+};
 
 module.exports = {
   postSaleController,

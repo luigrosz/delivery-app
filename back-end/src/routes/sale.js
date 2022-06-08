@@ -4,7 +4,7 @@ const {
   getAllSalesController,
   getSaleByIdSellerController,
   getSaleByIdUserController,
-  getSaleByIdSaleController} = require('../controller/sales.controller');
+  getSaleByIdSaleController } = require('../controller/sales.controller');
 const { validateJWT, validateObjects } = require('../middlewares');
 
 const router = express.Router();
