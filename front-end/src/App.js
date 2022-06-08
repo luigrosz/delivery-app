@@ -14,17 +14,9 @@ function App() {
     <Provider>
       <BrowserRouter>
         <Routes>
-          <Route
-            path="/"
-            element={
-              <>
-                <Navigate to="/login" />
-                <Login />
-              </>
-            }
-          />
-          <Route path="/login" element={ <Login /> } />
-          <Route path="/register" element={ <Signin /> } />
+          <Route exact path="/" element={ <Navigate to="/login" /> } />
+          <Route exact path="/login" element={ <Login /> } />
+          <Route exact path="/register" element={ <Signin /> } />
           <Route path="/customer" element={ <NavBar /> }>
             <Route path="checkout" element={ <Checkout /> } />
             <Route path="products" element={ <Products /> } />
