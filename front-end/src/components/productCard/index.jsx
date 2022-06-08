@@ -11,7 +11,7 @@ import { context } from '../../context';
 
 function ProductCard({ id, name, price, urlImage }) {
   const [quantity, setQuantity] = useState(0);
-  const { setProducts } = useContext(context);
+  const { setCart } = useContext(context);
   const previousNumber = useRef(quantity);
 
   useEffect(() => {
@@ -20,13 +20,20 @@ function ProductCard({ id, name, price, urlImage }) {
 
   const setProductQuantity = (newValue) => {
     setQuantity(newValue);
-    setProducts((prevProd) => prevProd.reduce((acc, product) => {
-      let newItem = product;
-      if (product.id === id) {
-        newItem = { ...product, quantity: newValue };
+    setCart((prevCart) => {
+      if ((!prevCart.some((p) => p.id === id) && (+newValue > 0))) {
+        return [...prevCart, { id, name, price: +price, urlImage, quantity: newValue }];
       }
-      return [...acc, newItem];
-    }, []));
+      return prevCart.reduce((acc, prev) => {
+        if (prev.id === id) {
+          if (newValue === 0) {
+            return acc;
+          }
+          return [...acc, { ...prev, quantity: newValue }];
+        }
+        return [...acc, prev];
+      }, []);
+    });
   };
 
   const handleQnt = ({ target: { value } }) => {

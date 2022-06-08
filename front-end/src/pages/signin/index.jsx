@@ -38,7 +38,7 @@ function Signin() {
           email, password, name,
         }),
       });
-    const notUniqueEmail = 400; // talvez mude depois
+    const notUniqueEmail = 409;
     if (response.status === notUniqueEmail) {
       return setAlreadyExists(true);
     }

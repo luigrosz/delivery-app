@@ -1,38 +1,41 @@
 import React from 'react';
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 import './App.css';
+import NavBar from './components/navBar';
 import Provider from './context';
 import rockGlass from './images/rockGlass.svg';
+import Checkout from './pages/checkout';
 import Login from './pages/login';
 import Products from './pages/products';
 import Signin from './pages/signin';
 
 function App() {
   return (
-    <div className="App">
-      <Provider>
-        <BrowserRouter>
-          <Routes>
-            <Route path="/" element={ <Navigate replace to="/login" /> } />
-            <Route path="/login" element={ <Login /> } />
-            <Route path="/register" element={ <Signin /> } />
-            <Route path="/customer/products" element={ <Products /> } />
-            <Route path="/customer/checkout" element={ <div> checkout </div> } />
-            <Route
-              path="/loading"
-              element={
-                <div>
-                  <object className="rocksGlass" type="image/svg+xml" data={ rockGlass }>
-                    Glass
-                  </object>
+    <Provider>
+      <BrowserRouter>
+        <Routes>
+          <Route exact path="/" element={ <Navigate to="/login" /> } />
+          <Route exact path="/login" element={ <Login /> } />
+          <Route exact path="/register" element={ <Signin /> } />
+          <Route path="/customer" element={ <NavBar /> }>
+            <Route path="checkout" element={ <Checkout /> } />
+            <Route path="products" element={ <Products /> } />
+          </Route>
+          <Route path="/customer/checkout" element={ <div> checkout </div> } />
+          <Route
+            path="/loading"
+            element={
+              <div>
+                <object className="rocksGlass" type="image/svg+xml" data={ rockGlass }>
+                  Glass
+                </object>
 
-                </div>
-              }
-            />
-          </Routes>
-        </BrowserRouter>
-      </Provider>
-    </div>
+              </div>
+            }
+          />
+        </Routes>
+      </BrowserRouter>
+    </Provider>
   );
 }
 
