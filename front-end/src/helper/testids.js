@@ -18,6 +18,10 @@ const ids = {
     checkoutTableItemUnit: 'customer_order_details__element-order-table-sub-total-',
     checkoutTableItemSubTotal: 'customer_order_details__element-order-total-price-',
     checoutTotalPrice: 'customer_order_details__element-order-table-unit-price',
+    orderCardID: 'seller_orders__element-order-id-',
+    orderCardStatus: 'seller_orders__element-delivery-status-',
+    orderCardDate: 'seller_orders__element-order-date-',
+    orderCardPrice: 'seller_orders__element-card-price-',
   },
 };
 
