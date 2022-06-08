@@ -48,9 +48,23 @@ const getSaleByIdSellerController = async (req, res, _next) => {
   }
 };
 
+const getSaleByIdSaleController = async (req, res, _next) => {
+  try {
+    const { id } = req.params;
+    const sale = await getSaleByIdUserService(id);
+    if (sale === null) {
+      return res.status(200).json([]);
+    }
+    return res.status(200).json(sale);
+  } catch (e) {
+    throw new Error(e);
+  }
+};
+
 module.exports = {
   postSaleController,
   getAllSalesController,
   getSaleByIdUserController,
   getSaleByIdSellerController,
+  getSaleByIdSaleController,
 };
