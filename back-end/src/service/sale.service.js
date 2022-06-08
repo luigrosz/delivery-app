@@ -74,9 +74,19 @@ const getSaleByIdUserService = async (id) => {
   }
 };
 
+const getSaleByIdSaleService = async (id) => {
+  try {
+    const saleObject = await sales.findOne({ where: { id } });
+    return saleObject;
+  } catch (e) {
+    throw new Error(e);
+  }
+}
+
 module.exports = {
   postSaleService,
   getAllSalesService,
   getSaleByIdUserService,
   getSaleByIdSellerService,
+  getSaleByIdSaleService,
 };
