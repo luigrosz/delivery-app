@@ -31,7 +31,7 @@ const postSaleService = async (params, user) => {
 
     await db.sequelize.query(noChecks, { type: QueryTypes.UPDATE });
     const saleQuery = await db.sequelize.query(postSaleQuery, {
-      replacements: [id, sellerId, totalPrice, deliveryAddress, deliveryNumber, now],
+      replacements: [id, sellerId, +totalPrice.replace(',', '.'), deliveryAddress, +deliveryNumber, now],
       type: QueryTypes.INSERT,
     });
 
@@ -39,7 +39,7 @@ const postSaleService = async (params, user) => {
     await createSalesProductsInDb(products, saleId);
 
     const result = {
-      userId: id, sellerId, totalPrice, deliveryAddress, deliveryNumber, products,
+      userId: id, saleId, sellerId, totalPrice, deliveryAddress, deliveryNumber, products, 
     };
     return result;
   } catch (error) {
