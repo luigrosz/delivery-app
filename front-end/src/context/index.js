@@ -59,6 +59,7 @@ const Provider = ({ children }) => {
     setUser,
     products,
     setProducts,
+    setTotalPrice,
     totalPrice,
     sellers,
     cart,

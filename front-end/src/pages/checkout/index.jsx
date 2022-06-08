@@ -7,13 +7,14 @@ import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
 import { context } from '../../context';
 import CheckoutTable from './CheckoutTable';
+import testids from '../../helper/testids';
 
 const minColP = 11;
 const medColP = 15;
 const maxColP = 20;
 
 function Checkout() {
-  const { cart, setCart, sellers } = useContext(context);
+  const { cart, setCart, sellers, user } = useContext(context);
   const [page, setPage] = useState(0);
   const [inputs, setInputs] = useState({
     sellerId: sellers[0]?.id, deliveryAddress: '', deliveryNumber: '' });
@@ -102,7 +103,7 @@ function Checkout() {
         component="h1"
         variant="h5"
         sx={ { mb: 2 } }
-        data-testid="customer_checkout__element-order-total-price"
+        data-testid={ testids[user.role].checkoutTotalPrice }
       >
         { `Total Price: ${calcTotal()}` }
       </Typography>

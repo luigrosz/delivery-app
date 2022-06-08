@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
@@ -8,8 +8,11 @@ import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import PropTypes from 'prop-types';
 import { Button } from '@mui/material';
+import { context } from '../../context';
+import testids from '../../helper/testids';
 
 function CheckoutTable({ filtered, page, rowsPerPage, handleRemove }) {
+  const { user } = useContext(context);
   const createDataTest = (testid, id) => `${testid}${id}`;
 
   return (
@@ -50,48 +53,32 @@ function CheckoutTable({ filtered, page, rowsPerPage, handleRemove }) {
               <TableRow key={ prod.id }>
                 <TableCell
                   align="left"
-                  data-testid={ createDataTest(
-                    'customer_checkout__element-order-table-item-number-',
-                    index,
-                  ) }
+                  data-testid={ `${testids[user.role].checkoutTableItemNumber}${index}` }
                 >
-                  { prod.id }
+                  { index + 1 }
                 </TableCell>
                 <TableCell
                   align="center"
-                  data-testid={ createDataTest(
-                    'customer_checkout__element-order-table-name-',
-                    index,
-                  ) }
+                  data-testid={ `${testids[user.role].checkoutTableItemName}${index}` }
                 >
                   { prod.name }
                 </TableCell>
                 <TableCell
                   align="right"
-                  data-testid={ createDataTest(
-                    'customer_checkout__element-order-table-quantity-',
-                    index,
-                  ) }
-
+                  data-testid={ `${testids[user.role].checkoutTableItemQnt}${index}` }
                 >
                   { prod.quantity }
                 </TableCell>
                 <TableCell
                   align="right"
-                  data-testid={ createDataTest(
-                    'customer_checkout__element-order-table-unit-price-',
-                    index,
-                  ) }
+                  data-testid={ `${testids[user.role].checkoutTableItemUnit}${index}` }
 
                 >
                   { prod.price.toFixed(2).toString().replace('.', ',') }
                 </TableCell>
                 <TableCell
                   align="right"
-                  data-testid={ createDataTest(
-                    'customer_checkout__element-order-table-sub-total-',
-                    index,
-                  ) }
+                  data-testid={ `${testids[user.role].checkoutTableItemSub}${index}` }
                 >
                   { (prod.price * prod.quantity).toFixed(2).toString().replace('.', ',') }
                 </TableCell>
