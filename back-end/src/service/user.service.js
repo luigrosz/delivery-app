@@ -1,5 +1,8 @@
 const md5 = require('md5');
+const { QueryTypes } = require('sequelize');
+const db = require('../database/models');
 const { users } = require('../database/models');
+const { registerNewUser } = require('../helpers/dbHelper');
 
 const loginService = async (email, password) => {
   try {
@@ -22,6 +25,33 @@ const registerService = async (email, password, name) => {
   }
 };
 
+const findUserByIdService = async (id) => {
+  try {
+    const user = await users.findOne({ where: { id } });
+    return user;
+  } catch (error) {
+    throw new Error(error);
+  }
+};
+
+const registerByAdminService = async (registerUser, emailAdmin) => {
+  try {
+    const { name, email, password, role } = registerUser;
+    const isAdmin = await users.findOne({ where: { email: emailAdmin } });
+    if (isAdmin.role !== 'administrator') {
+      return null;
+    }
+    const result = await db.sequelize.query(registerNewUser, {
+      replacements: [name, email, md5(password), role],
+      type: QueryTypes.INSERT,
+    });
+    return result;
+  } catch (error) {
+    const emailIsNotUnique = 'This email is not unique';
+    return emailIsNotUnique;
+  }
+};
+
 const allSellersService = async () => {
   try {
     const sellers = await users.findAll({ where: { role: 'seller' } });
@@ -31,4 +61,10 @@ const allSellersService = async () => {
   }
 };
 
-module.exports = { registerService, loginService, allSellersService }; 
+module.exports = {
+  registerService,
+  loginService,
+  allSellersService,
+  findUserByIdService,
+  registerByAdminService,
+}; 
