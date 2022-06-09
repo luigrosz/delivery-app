@@ -2,7 +2,8 @@ const {
   postSaleService,
   getAllSalesService,
   getSaleByIdSellerService,
-  getSaleByIdUserService, 
+  getSaleByIdUserService,
+  getSaleByIdSaleService, 
   updateSaleStatusByIdService } = require('../service/sale.service');
 
 const getAllSalesController = async (_req, res, _next) => {
