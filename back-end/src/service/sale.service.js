@@ -71,7 +71,7 @@ const getAllSalesService = async () => {
 
 const getSaleByIdSellerService = async (id) => {
   try {
-    const saleObject = await sales.findOne({ where: { [sellerIdSnake]: id } });
+    const saleObject = await sales.findAll({ where: { [sellerIdSnake]: id } });
     return saleObject;
   } catch (error) {
     throw new Error(error);
@@ -80,7 +80,7 @@ const getSaleByIdSellerService = async (id) => {
 
 const getSaleByIdUserService = async (id) => {
   try {
-    const saleObject = await sales.findOne({ where: { [userIdSnake]: id } });
+    const saleObject = await sales.findAll({ where: { [userIdSnake]: id } });
     return saleObject;
   } catch (error) {
     throw new Error(error);
