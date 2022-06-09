@@ -96,10 +96,30 @@ const getSaleByIdSaleService = async (id) => {
   }
 };
 
+const updateSaleStatusByIdService = async (id, user, status) => {
+  try {
+    const { email } = user;
+    const getUser = await users.findOne({ where: { email } });
+    if (getUser.role === 'customer') {
+      return null;
+    }
+
+    const updatedSale = await sales.update({ status }, {
+      where: { 
+        id,
+      },
+    }); 
+    return updatedSale;
+  } catch (error) {
+    throw new Error(error);
+  }
+};
+
 module.exports = {
   postSaleService,
   getAllSalesService,
   getSaleByIdUserService,
   getSaleByIdSellerService,
   getSaleByIdSaleService,
+  updateSaleStatusByIdService,
 };
