@@ -1,17 +1,22 @@
-import React, { useEffect, useContext } from 'react';
+import { Grid, Paper } from '@mui/material';
+import React, { useEffect, useContext, useState } from 'react';
+import OrderCard from '../../components/orderCard';
 import { context } from '../../context';
 
 const Orders = () => {
   const { APIURL } = useContext(context);
+  const [orders, setOrders] = useState([]);
 
   const fetchOrders = async () => {
-    const { token, id } = JSON.parse(localStorage.getItem('user'));
-    const response = await fetch(`${APIURL}/sale/${id}`, {
+    const { token, id, role } = JSON.parse(localStorage.getItem('user'));
+
+    const response = await fetch(`${APIURL}/sale/${role}/${id}`, {
       headers: {
         authorization: token,
       },
     });
-    const data = await response;
+    const data = await response.json();
+    setOrders(data);
     console.log('resposta', data);
   };
 
@@ -20,7 +25,16 @@ const Orders = () => {
   }, []);
 
   return (
-    <div />
+    <Grid container component={ Paper } spacing={ 2 }>
+      { orders.map((order) => (
+        <Grid item xs={ 4 } key={ order.id }>
+          <OrderCard
+            { ...order }
+            saleDate={ order.sale_date }
+            totalPrice={ order.total_price }
+          />
+        </Grid>)) }
+    </Grid>
   );
 };
 
