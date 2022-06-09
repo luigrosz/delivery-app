@@ -2,7 +2,8 @@ const {
   postSaleService,
   getAllSalesService,
   getSaleByIdSellerService,
-  getSaleByIdUserService } = require('../service/sale.service');
+  getSaleByIdUserService, 
+  getSaleByIdSaleService } = require('../service/sale.service');
 
 const getAllSalesController = async (_req, res, _next) => {
   try {
@@ -51,7 +52,7 @@ const getSaleByIdUserController = async (req, res, _next) => {
 const getSaleByIdSaleController = async (req, res, _next) => {
   try {
     const { id } = req.params;
-    const sale = await getSaleByIdUserService(id);
+    const sale = await getSaleByIdSaleService(id);
     if (sale === null) {
       return res.status(200).json([]);
     }
