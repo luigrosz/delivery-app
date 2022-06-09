@@ -10,6 +10,19 @@ const ids = {
     orderCardStatus: 'customer_orders__element-delivery-status-',
     orderCardDate: 'customer_orders__element-order-date-',
     orderCardPrice: 'customer_orders__element-card-price-',
+    detailsTableItemNumber: 'customer_order_details__element-order-table-item-number-',
+    detailsTableItemName: 'customer_order_details__element-order-table-name-',
+    detailsTableItemQnt: 'customer_order_details__element-order-table-quantity-',
+    detailsTableItemUnit: 'customer_order_details__element-order-total-price-',
+    detailsOrderId: 'customer_order_details__element-order-details-label-order-id',
+    detailsOrderSellerName:
+      'customer_order_details__element-order-details-label-seller-name',
+    detailsOrderDate:
+      'customer_order_details__element-order-details-label-order-date',
+    detailsOrderDeliveryStatus:
+      'customer_order_details__element-order-details-label-delivery-status',
+    detailsOrderDeliveryCheck: 'customer_order_details__button-delivery-check',
+    detailsOrderTotalPrice: 'customer_order_details__element-order-total-price',
   },
   seller: {
     checkoutTableItemNumber: 'customer_order_details__element-order-table-item-number-',
