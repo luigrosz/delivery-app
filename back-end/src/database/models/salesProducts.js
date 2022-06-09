@@ -1,5 +1,5 @@
 const associations = (models) => {
-  models.salesProducts.belongsTo(
+  /* models.salesProducts.belongsTo(
     models.products, {
       as: 'products',
       foreignKey: 'product_id',
@@ -7,6 +7,22 @@ const associations = (models) => {
     models.sales, {
       as: 'sales',
       foreignKey: 'sale_id',
+    },
+  ); */
+  models.products.belongsToMany(
+    models.sales, {
+      as: 'sales',
+      through: 'salesProducts',
+      foreignKey: 'sale_id',
+      otherKey: 'product_id',
+    },
+  );
+  models.sales.belongsToMany(
+    models.products, {
+      as: 'products',
+      through: 'salesProducts',
+      foreignKey: 'product_id',
+      otherKey: 'sale_id',
     },
   );
 };
