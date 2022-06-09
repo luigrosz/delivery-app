@@ -22,7 +22,7 @@ const postSaleController = async (req, res, _next) => {
   }
 };
 
-const getSaleByIdUserController = async (req, res, _next) => {
+const getSaleByIdSellerController = async (req, res, _next) => {
   try {
     const { id } = req.params;
     const sales = await getSaleByIdSellerService(id);
@@ -35,7 +35,7 @@ const getSaleByIdUserController = async (req, res, _next) => {
   }
 };
 
-const getSaleByIdSellerController = async (req, res, _next) => {
+const getSaleByIdUserController = async (req, res, _next) => {
   try {
     const { id } = req.params;
     const sales = await getSaleByIdUserService(id);

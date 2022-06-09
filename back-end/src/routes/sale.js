@@ -10,7 +10,7 @@ const { validateJWT, validateObjects } = require('../middlewares');
 const router = express.Router();
 
 router.get('/', validateJWT, getAllSalesController);
-router.get('/user/:id', validateJWT, getSaleByIdUserController);
+router.get('/customer/:id', validateJWT, getSaleByIdUserController);
 router.get('/seller/:id', validateJWT, getSaleByIdSellerController);
 router.get('/:id', validateJWT, getSaleByIdSaleController);
 router.post('/', validateObjects, validateJWT, postSaleController);
