@@ -1,4 +1,5 @@
 import React, { useContext, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Select, TablePagination, TextField, Typography } from '@mui/material';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
@@ -14,7 +15,8 @@ const medColP = 15;
 const maxColP = 20;
 
 function Checkout() {
-  const { cart, setCart, sellers, user } = useContext(context);
+  const navigate = useNavigate();
+  const { cart, setCart, sellers, user, APIURL } = useContext(context);
   const [page, setPage] = useState(0);
   const [inputs, setInputs] = useState({
     sellerId: sellers[0]?.id, deliveryAddress: '', deliveryNumber: '' });
@@ -46,23 +48,23 @@ function Checkout() {
   ).toFixed(2).toString().replace('.', ',');
 
   const sendOrder = async () => {
+    const { token } = JSON.parse(localStorage.getItem('user'));
     const body = {
       ...inputs,
       totalPrice: calcTotal(),
       products: cart,
     };
-    console.log(body);
-    /* await fetch(`${APIURL}/sale`, {
+    const sended = await fetch(`${APIURL}/sale`, {
+      method: 'POST',
+      // mode: 'no-cors',
       headers: {
         'Content-type': 'application/json',
-        Authorization: user.token
+        Authorization: token,
       },
-      body: {
-        ...inputs,
-        totalPrice: calcTotal(),
-        products: products.filter((p) => p?.quantity),
-      }
-    }) */
+      body: JSON.stringify(body),
+    });
+    const { saleId } = await sended.json();
+    if (sended.ok) navigate(`/orders/${saleId}`);
   };
 
   return (
@@ -151,8 +153,8 @@ function Checkout() {
             label="Endereço"
             inputProps={ { 'data-testid': 'customer_checkout__input-address' } }
             onChange={ handleInputChange }
-            name="deliveryAddres"
-            value={ inputs.deliveryAddres }
+            name="deliveryAddress"
+            value={ inputs.deliveryAddress }
           />
           <TextField
             label="Numero"

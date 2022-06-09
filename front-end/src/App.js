@@ -8,6 +8,7 @@ import Checkout from './pages/checkout';
 import Login from './pages/login';
 import Products from './pages/products';
 import Signin from './pages/signin';
+import Orders from './pages/orders';
 
 function App() {
   return (
@@ -20,6 +21,7 @@ function App() {
           <Route path="/customer" element={ <NavBar /> }>
             <Route path="checkout" element={ <Checkout /> } />
             <Route path="products" element={ <Products /> } />
+            <Route path="orders" element={ <Orders /> } />
           </Route>
           <Route path="/customer/checkout" element={ <div> checkout </div> } />
           <Route
