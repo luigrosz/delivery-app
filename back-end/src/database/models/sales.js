@@ -1,11 +1,13 @@
 const associations = (models) => {
   models.sales.belongsTo(
     models.users, {
-      as: 'users',
+      as: 'customer',
       foreignKey: 'user_id',
-    },
+    }
+  );
+  models.sales.belongsTo(
     models.users, {
-      as: 'users',
+      as: 'seller',
       foreignKey: 'seller_id',
     },
   );
