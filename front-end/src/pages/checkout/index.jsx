@@ -64,7 +64,7 @@ function Checkout() {
       body: JSON.stringify(body),
     });
     const { saleId } = await sended.json();
-    if (sended.ok) navigate(`/orders/${saleId}`);
+    if (sended.ok) navigate(`/customer/orders/${saleId}`);
   };
 
   return (
