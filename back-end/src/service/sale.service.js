@@ -3,7 +3,6 @@ const { QueryTypes } = require('sequelize');
 const db = require('../database/models');
 const { users, sales } = require('../database/models');
 const { postSaleQuery,
-  now,
   postSalesProductQuery,
   noChecks,
   userIdSnake,
@@ -29,7 +28,7 @@ async function createSaleInDb(params, id) {
 
   const saleQuery = await db.sequelize.query(postSaleQuery, {
     replacements: [id, sellerId, +totalPrice.replace(',', '.'),
-      deliveryAddress, +deliveryNumber, now],
+      deliveryAddress, +deliveryNumber],
     type: QueryTypes.INSERT,
   });
 
@@ -103,7 +102,6 @@ const updateSaleStatusByIdService = async (id, user, status) => {
     if (getUser.role === 'customer') {
       return null;
     }
-
     const updatedSale = await sales.update({ status }, {
       where: { 
         id,
