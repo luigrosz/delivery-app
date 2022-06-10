@@ -30,7 +30,7 @@ const postSaleController = async (req, res, _next) => {
 const getSaleByIdSellerController = async (req, res, _next) => {
   try {
     const { id } = req.params;
-    const sales = await getSaleByIdUserService(id);
+    const sales = await getSaleByIdSellerService(id);
     if (sales === null) {
       return res.status(200).json([]);
     }
@@ -43,7 +43,7 @@ const getSaleByIdSellerController = async (req, res, _next) => {
 const getSaleByIdUserController = async (req, res, _next) => {
   try {
     const { id } = req.params;
-    const sales = await getSaleByIdSellerService(id);
+    const sales = await getSaleByIdUserService(id);
     if (sales === null) {
       return res.status(200).json([]);
     }
