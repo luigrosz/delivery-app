@@ -1,10 +1,10 @@
 const {
-  postSaleService,
   getAllSalesService,
   getSaleByIdSellerService,
   getSaleByIdUserService,
   getSaleByIdSaleService, 
-  updateSaleStatusByIdService } = require('../service/sale.service');
+  updateSaleStatusByIdService, 
+  createSaleAndAll } = require('../service/sale.service');
 
 const getAllSalesController = async (_req, res, _next) => {
   try {
@@ -17,10 +17,13 @@ const getAllSalesController = async (_req, res, _next) => {
 
 const postSaleController = async (req, res, _next) => {
   try {
-    const sale = await postSaleService(req.body, req.user);
+    const { deliveryAddress, deliveryNumber, products, sellerId, totalPrice } = req.body;
+    const sale = await createSaleAndAll(
+      { deliveryAddress, deliveryNumber, products, sellerId, totalPrice }, req.user,
+    );
     return res.status(201).json(sale);
-  } catch (e) {
-    throw new Error(e);
+  } catch (error) {
+    throw new Error(error);
   }
 };
 

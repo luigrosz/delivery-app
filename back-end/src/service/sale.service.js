@@ -1,83 +1,68 @@
-const md5 = require('md5');
-const { QueryTypes } = require('sequelize');
-const db = require('../database/models');
-const { users, sales, products } = require('../database/models');
-const { postSaleQuery,
-  postSalesProductQuery,
-  noChecks,
-  userIdSnake,
-  sellerIdSnake,
+const { users, sales, products, salesProducts } = require('../database/models');
+const { userIdSnake, sellerIdSnake,
 } = require('../helpers/dbHelper');
 
-const mapProductsInSales = (obj) => {
-  const { products: prodItems, ...saleItens } = obj.dataValues;
-  console.log(obj.dataValues);
-  const mappedProducts = prodItems.map((p) => {
-    const { salesProducts, ...otherItens } = p.dataValues;
-    const { quantity } = salesProducts.dataValues;
-      return { ...otherItens, quantity };
+const createProductAssociation = async (itensSold, saleId) => {
+  const promises = await itensSold.map(async (prod) => {
+    await salesProducts.create({
+      saleId,
+      productId: prod.id,
+      quantity: prod.quantity,
     });
-    return { ...saleItens, products: mappedProducts };
+  });
+  Promise.all(promises);
 };
 
-async function createSalesProductsInDb(productsArr, saleId) {
-  const productsPromise = productsArr.map((product) => {
-    const result = db.sequelize.query(postSalesProductQuery, {
-      replacements: [product.id, saleId, product.quantity],
-      type: QueryTypes.INSERT,
-    });
-    return result;
-  });
-
-  const result = await Promise.all(productsPromise);
-  return result;
-}
-
-async function createSaleInDb(params, id) {
-  const { sellerId, totalPrice, deliveryAddress, deliveryNumber, products: productsP } = params;
-  await db.sequelize.query(noChecks, { type: QueryTypes.UPDATE });
-
-  const saleQuery = await db.sequelize.query(postSaleQuery, {
-    replacements: [id, sellerId, +totalPrice.replace(',', '.'),
-      deliveryAddress, +deliveryNumber],
-    type: QueryTypes.INSERT,
-  });
-  const result = {
-    userId: id,
-    saleId: saleQuery[0],
-    sellerId,
-    totalPrice,
-    deliveryAddress,
-    deliveryNumber,
-    productsP,
-  };
-  return result;
-}
-
-const postSaleService = async (params, user) => {
+const createSaleAndAll = async (sale, user) => {
   try {
-    const { products: productsP } = params;
-    const { email, password } = user;
-    const { id } = await users.findOne({ where: { email, password: md5(password) } });
-
-    const result = await createSaleInDb(params, id);
-    await createSalesProductsInDb(productsP, result.saleId);
-
-    return result;
+    const { id } = await users.findOne({
+      where: {
+        email: user.email,
+      },
+    });
+    const saleId = await sales.create({
+      userId: id,
+      ...sale,
+      status: 'Pendente',
+      products: sale.products,
+    });
+    createProductAssociation(sale.products, saleId.id);
   } catch (error) {
-    throw new Error(error);
+    console.log(error);
+    return error;
   }
+};
+
+const getProductsOfSale = async (saleId) => {
+  const productsId = await salesProducts.findAll({ where: {
+    saleId,
+  } });
+  const response = await productsId.map(async ({ productId, quantity }) => {
+    const { id, name, price, urlImage } = await products.findOne({ where: { id: productId } });
+    return { id, name, price, urlImage, quantity };
+  });
+  const fetchedProducts = await Promise.all(response);
+  return fetchedProducts;
+};
+
+const filterSaleItens = (sale) => {
+  const {
+    id, userId, sellerId, totalPrice, deliveryAddress, deliveryNumber, status,
+  } = sale;
+  return { id, userId, sellerId, totalPrice, deliveryAddress, deliveryNumber, status };
 };
 
 const getAllSalesService = async () => {
   try {
-    const saleObject = await sales.findAll({ include:
-      [{
-        model: products,
-        as: 'products',
-      }] });
-    const mappedSales = saleObject.map((sale) => mapProductsInSales(sale));
-    return mappedSales;
+    const allSales = await sales.findAll({ include:
+      [{ model: products, as: 'products' }] });
+    const promises = allSales.map(async (singleSales) => {
+      const prod = await getProductsOfSale(singleSales.id);
+      const filteredItens = filterSaleItens(singleSales);
+      return { ...filteredItens, products: prod };
+    });
+    const builtSales = await Promise.all(promises);
+    return builtSales;
   } catch (error) {
     throw new Error(error);
   }
@@ -85,13 +70,10 @@ const getAllSalesService = async () => {
 
 const getSaleByIdSellerService = async (id) => {
   try {
-    const saleObject = await sales.findAll({ where: { [sellerIdSnake]: id },
-      include: [{
-      model: products,
-      as: 'products',
-    }] });
-    const mappedSales = saleObject.map((sale) => mapProductsInSales(sale));
-    return mappedSales;
+    const saleObject = await sales.findAll({ where: { [sellerIdSnake]: id } });
+    const prod = await getProductsOfSale(saleObject.id);
+    const filteredItens = filterSaleItens(saleObject);
+    return { ...filteredItens, products: prod };
   } catch (error) {
     throw new Error(error);
   }
@@ -99,14 +81,10 @@ const getSaleByIdSellerService = async (id) => {
 
 const getSaleByIdUserService = async (id) => {
   try {
-    const saleObject = await sales.findAll({ where: { [userIdSnake]: id },
-      include: [{
-        model: products,
-        as: 'products',
-      }],
-    });
-    const mappedSales = saleObject.map((sale) => mapProductsInSales(sale));
-    return mappedSales;
+    const saleObject = await sales.findAll({ where: { [userIdSnake]: id } });
+    const prod = await getProductsOfSale(saleObject.id);
+    const filteredItens = filterSaleItens(saleObject);
+    return { ...filteredItens, products: prod };
   } catch (error) {
     throw new Error(error);
   }
@@ -114,20 +92,10 @@ const getSaleByIdUserService = async (id) => {
 
 const getSaleByIdSaleService = async (id) => {
   try {
-    const saleObject = await sales.findOne({ where: { id },
-      include:
-      [{
-        model: products,
-        as: 'products',
-      }, { model: users,
-        as: 'customer',
-        attributes: ['name'],
-      }, { model: users,
-        as: 'seller',
-        attributes: ['name'],
-      }] });
-    const remadeObj = mapProductsInSales(saleObject);
-    return remadeObj;
+    const saleObject = await sales.findOne({ where: { id } });
+    const prod = await getProductsOfSale(saleObject.id);
+    const filteredItens = filterSaleItens(saleObject);
+    return { ...filteredItens, products: prod };
   } catch (e) {
     throw new Error(e);
   }
@@ -152,10 +120,10 @@ const updateSaleStatusByIdService = async (id, user, status) => {
 };
 
 module.exports = {
-  postSaleService,
   getAllSalesService,
   getSaleByIdUserService,
   getSaleByIdSellerService,
   getSaleByIdSaleService,
   updateSaleStatusByIdService,
+  createSaleAndAll,
 };
