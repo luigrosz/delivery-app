@@ -30,8 +30,8 @@ const Orders = () => {
         <Grid item xs={ 4 } key={ order.id }>
           <OrderCard
             { ...order }
-            saleDate={ order.sale_date }
-            totalPrice={ order.total_price }
+            saleDate={ order.saleDate }
+            totalPrice={ order.totalPrice }
           />
         </Grid>)) }
     </Grid>
