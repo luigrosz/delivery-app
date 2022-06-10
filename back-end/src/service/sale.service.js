@@ -54,18 +54,23 @@ const filterSaleItens = (sale) => {
   return { id, customer, seller, totalPrice, deliveryAddress, deliveryNumber, status, saleDate };
 };
 
+const mapAllSales = async (allSales) => {
+  const promises = allSales.map(async (singleSales) => {
+    const prod = await getProductsOfSale(singleSales.id);
+    const filteredItens = filterSaleItens(singleSales);
+    return { ...filteredItens, products: prod };
+  });
+  const builtSales = await Promise.all(promises);
+  return builtSales;
+};
+
 const getAllSalesService = async () => {
   try {
     const allSales = await sales.findAll({ include:
       [{ model: users, as: 'customer', attributes: ['name'] },
       { model: users, as: 'seller', attributes: ['name'] }] });
-    const promises = allSales.map(async (singleSales) => {
-      const prod = await getProductsOfSale(singleSales.id);
-      const filteredItens = filterSaleItens(singleSales);
-      return { ...filteredItens, products: prod };
-    });
-    const builtSales = await Promise.all(promises);
-    return builtSales;
+    const mappedSales = mapAllSales(allSales);
+    return mappedSales;
   } catch (error) {
     throw new Error(error);
   }
@@ -73,12 +78,11 @@ const getAllSalesService = async () => {
 
 const getSaleByIdSellerService = async (id) => {
   try {
-    const saleObject = await sales.findAll({ where: { [sellerIdSnake]: id },
+    const allSales = await sales.findAll({ where: { [sellerIdSnake]: id },
       include: [{ model: users, as: 'customer', attributes: ['name'] },
       { model: users, as: 'seller', attributes: ['name'] }] });
-    const prod = await getProductsOfSale(saleObject.id);
-    const filteredItens = filterSaleItens(saleObject);
-    return { ...filteredItens, products: prod };
+      const mappedSales = mapAllSales(allSales);
+      return mappedSales;
   } catch (error) {
     throw new Error(error);
   }
@@ -86,12 +90,11 @@ const getSaleByIdSellerService = async (id) => {
 
 const getSaleByIdUserService = async (id) => {
   try {
-    const saleObject = await sales.findAll({ where: { [userIdSnake]: id },
+    const allSales = await sales.findAll({ where: { userId: id },
       include: [{ model: users, as: 'customer', attributes: ['name'] },
       { model: users, as: 'seller', attributes: ['name'] }] });
-    const prod = await getProductsOfSale(saleObject.id);
-    const filteredItens = filterSaleItens(saleObject);
-    return { ...filteredItens, products: prod };
+    const mappedSales = mapAllSales(allSales);
+    return mappedSales;
   } catch (error) {
     throw new Error(error);
   }
