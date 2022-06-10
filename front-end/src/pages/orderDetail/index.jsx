@@ -27,6 +27,7 @@ function OrderDetail() {
   const rowsPerPageOption = [minColP, medColP, maxColP];
 
   const [sale, setSale] = useState(null);
+  const [isDisabled, setIsDisabled] = useState(true);
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -46,8 +47,10 @@ function OrderDetail() {
     if (response.ok) {
       const data = await response.json();
       data.products = data.products.map((p) => ({ ...p, price: +p.price }));
-      console.log(data);
       setSale(data);
+      if (data.status !== 'Pendente') {
+        setIsDisabled(false);
+      }
     }
   }, [setSale, APIURL, id, user]);
 
@@ -116,6 +119,7 @@ function OrderDetail() {
       <Button
         sx={ { mb: 2 } }
         data-testid={ testids[user.role].detailsOrderDeliveryCheck }
+        disabled={ isDisabled }
       >
         Marcar como entregue
       </Button>

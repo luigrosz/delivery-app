@@ -2,6 +2,7 @@ import { Grid, Paper, Typography } from '@mui/material';
 import React, { useContext } from 'react';
 import PropTypes from 'prop-types';
 import { format } from 'date-fns';
+import { useNavigate } from 'react-router-dom';
 import { context } from '../../context';
 import testids from '../../helper/testids';
 
@@ -12,6 +13,8 @@ const OrderCard = ({ id, status, saleDate, totalPrice }) => {
   const date = new Date(saleDate.toString());
   const formatedDate = format(date, 'dd/MM/yy');
 
+  const navigate = useNavigate();
+
   return (
     <Grid
       container
@@ -19,6 +22,7 @@ const OrderCard = ({ id, status, saleDate, totalPrice }) => {
       alignItems="center"
       sx={ { backgroundColor: '#e4e4e4' } }
       component={ Paper }
+      onClick={ () => navigate(`/customer/orders/${id}`) }
     >
       <Grid item xs={ 2 } sx={ { ...style, backgroundColor: '#ffffff' } }>
         <Typography>Pedido</Typography>
