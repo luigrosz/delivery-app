@@ -9,33 +9,41 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      user_id: {
+      userId: {
+        field: 'user_id',
+        allowNull: false,
         type: Sequelize.INTEGER,
         references: {
           model: 'users',
           key: 'id',
         },
       },
-      seller_id: {
+      sellerId: {
+        field: 'seller_id',
+        allowNull: false,
         type: Sequelize.INTEGER,
         references: {
           model: 'users',
           key: 'id',
         },
       },
-      total_price: {
+      totalPrice: {
+        field: 'total_price',
         type: Sequelize.DECIMAL(9,2)
       },
-      delivery_address: {
+      deliveryAddress: {
+        field: 'delivery_address',
         type: Sequelize.STRING
       },
-      delivery_number: {
+      deliveryNumber: {
+        field: 'delivery_number',
         type: Sequelize.STRING
       },
       status: {
         type: Sequelize.STRING
       },
-      sale_date: {
+      saleDate: {
+        field: 'sale_date',
         type: Sequelize.DATE,
         allowNull: false,
         defaultValue: Sequelize.fn('now')

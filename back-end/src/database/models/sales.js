@@ -2,29 +2,32 @@ const associations = (models) => {
   models.sales.belongsTo(
     models.users, {
       as: 'customer',
-      foreignKey: 'user_id',
+      foreignKey: 'userId',
     }
   );
   models.sales.belongsTo(
     models.users, {
       as: 'seller',
-      foreignKey: 'seller_id',
+      foreignKey: 'sellerId',
     },
   );
 };
 
 module.exports = (sequelize, DataTypes) => {
   const Sales = sequelize.define('sales', {
-    total_price: DataTypes.DECIMAL(9,2),
-    delivery_address: DataTypes.STRING,
-    delivery_number: DataTypes.STRING,
+    userId: { type: DataTypes.INTEGER, foreignKey: true},
+    sellerId: { type: DataTypes.INTEGER, foreignKey: true},
+    totalPrice: DataTypes.DECIMAL(9,2),
+    deliveryAddress: DataTypes.STRING,
+    deliveryNumber: DataTypes.STRING,
     status: DataTypes.STRING,
-    sale_date: {
+    saleDate: {
       type: DataTypes.DATE,
     },
   }, {
     sequelize,
     tableName: 'sales',
+    underscored: true,
     timestamps: false,
   });
   Sales.associate = associations;
