@@ -17,10 +17,11 @@ function CheckoutTable({ filtered, page, rowsPerPage, handleRemove, isDetail }) 
   const dataTestIdValue = (str, index) => {
     const base = testids[user.role];
     if (isDetail) {
-      return (index) ? `${base[str.replace('checkout', 'details')]}${index}`
+      return (typeof index === 'number')
+        ? `${base[str.replace('checkout', 'details')]}${index}`
         : base[str.replace('checkout', 'details')];
     }
-    return (index) ? `${base[str]}${index}` : base[str];
+    return (typeof index === 'number') ? `${base[str]}${index}` : base[str];
   };
 
   return (
