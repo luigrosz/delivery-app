@@ -1,6 +1,5 @@
 const { users, sales, products, salesProducts } = require('../database/models');
-const { userIdSnake, sellerIdSnake,
-} = require('../helpers/dbHelper');
+const { sellerIdSnake } = require('../helpers/dbHelper');
 
 const createProductAssociation = async (itensSold, saleId) => {
   const promises = await itensSold.map(async (prod) => {
