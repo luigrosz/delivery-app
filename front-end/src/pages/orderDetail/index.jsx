@@ -105,7 +105,7 @@ function OrderDetail() {
         <Typography
           data-testid={ testids[user.role].detailsOrderDate }
         >
-          {formatData(sale.sale_date)}
+          {formatData(sale.saleDate)}
         </Typography>
         <Typography
           data-testid={ testids[user.role].detailsOrderDeliveryStatus }
