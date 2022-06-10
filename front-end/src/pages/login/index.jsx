@@ -49,7 +49,13 @@ const Login = () => {
     }
     const data = await response.json();
     setUser(data);
-    navigate(`/${data.role}/products`);
+    if (data.role === 'customer') {
+      navigate('/customer/products');
+    } else if (data.role === 'seller') {
+      navigate('/seller/orders');
+    } else {
+      navigate('/admin');
+    }
   };
 
   const handleClose = (e, reason) => {
