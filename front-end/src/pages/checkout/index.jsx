@@ -43,17 +43,24 @@ function Checkout() {
     setInputs((prevInput) => ({ ...prevInput, [name]: value }));
   };
 
-  const calcTotal = () => cart.reduce(
-    (acc, f) => acc + (f.price * f.quantity), 0,
-  ).toFixed(2).toString().replace('.', ',');
+  const calcTotal = (format = true) => {
+    const totalPrice = cart.reduce(
+      (acc, f) => acc + (f.price * f.quantity), 0,
+    ).toFixed(2);
+    if (format) {
+      return totalPrice.toString().replace('.', ',');
+    }
+    return totalPrice;
+  };
 
   const sendOrder = async () => {
     const { token } = JSON.parse(localStorage.getItem('user'));
     const body = {
       ...inputs,
-      totalPrice: calcTotal(),
+      totalPrice: calcTotal(false),
       products: cart,
     };
+    console.log(body);
     const sended = await fetch(`${APIURL}/sale`, {
       method: 'POST',
       // mode: 'no-cors',
