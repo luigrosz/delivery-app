@@ -16,16 +16,19 @@ function App() {
     <Provider>
       <BrowserRouter>
         <Routes>
-          <Route exact path="/" element={ <Navigate to="/login" /> } />
-          <Route exact path="/login" element={ <Login /> } />
-          <Route exact path="/register" element={ <Signin /> } />
+          <Route path="/" element={ <Navigate to="/login" /> } />
+          <Route path="/login" element={ <Login /> } />
+          <Route path="/register" element={ <Signin /> } />
           <Route path="/customer" element={ <NavBar /> }>
             <Route path="checkout" element={ <Checkout /> } />
             <Route path="products" element={ <Products /> } />
             <Route path="orders" element={ <Orders /> } />
             <Route path="orders/:id" element={ <OrderDetail /> } />
           </Route>
-          <Route path="/customer/checkout" element={ <div> checkout </div> } />
+          <Route path="/seller" element={ <NavBar /> }>
+            <Route path="orders" element={ <Orders /> } />
+            <Route path="orders/:id" element={ <OrderDetail /> } />
+          </Route>
           <Route
             path="/loading"
             element={
