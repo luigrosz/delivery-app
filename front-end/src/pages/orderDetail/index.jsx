@@ -69,85 +69,104 @@ function OrderDetail() {
   ).toFixed(2).toString().replace('.', ',');
 
   return (
-    <Grid
-      container
-      component="main"
-      sx={ {
-        height: '100%',
-        width: '100%',
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        flexWrap: 'nowrap',
-        justifyContent: 'center',
-        backgroundColor: 'white',
-      } }
-    >
-      <Typography component="h1" variant="h5" sx={ { mb: 2, mt: 1 } }>
-        Detalhe do Pedido
-      </Typography>
-      <Container
-        component={ Paper }
+    <>
+      <Grid
+        container
+        component="main"
         sx={ {
+          height: '100%',
+          width: '100%',
           display: 'flex',
-          justifyContent: 'space-between',
-          width: '70%',
-          mb: 4,
+          flexDirection: 'column',
+          alignItems: 'center',
+          flexWrap: 'nowrap',
+          justifyContent: 'center',
+          backgroundColor: 'white',
         } }
       >
-        <Typography
-          data-testid={ testids[user.role].detailsOrderId }
-        >
-          {formatOrderDigits(sale.id)}
+        <Typography component="h1" variant="h5" sx={ { mb: 2, mt: 1 } }>
+          Detalhe do Pedido
         </Typography>
-        <Typography
-          data-testid={ testids[user.role].detailsOrderSellerName }
+        <Container
+          component={ Paper }
+          sx={ {
+            display: 'flex',
+            justifyContent: 'space-between',
+            width: '70%',
+            mb: 4,
+          } }
         >
-          {`P. Vend: ${sale.seller.name}`}
-        </Typography>
-        <Typography
-          data-testid={ testids[user.role].detailsOrderDate }
+          <Typography
+            data-testid={ testids[user.role].detailsOrderId }
+          >
+            {formatOrderDigits(sale.id)}
+          </Typography>
+          <Typography
+            data-testid={ testids[user.role].detailsOrderSellerName }
+          >
+            {`P. Vend: ${sale.seller.name}`}
+          </Typography>
+          <Typography
+            data-testid={ testids[user.role].detailsOrderDate }
+          >
+            {formatData(sale.saleDate)}
+          </Typography>
+          <Typography
+            data-testid={ testids[user.role].detailsOrderDeliveryStatus }
+          >
+            {sale.status}
+          </Typography>
+        </Container>
+        <Button
+          sx={ { mb: 2 } }
+          data-testid={ testids[user.role].detailsOrderDeliveryCheck }
+          disabled={ isDisabled }
         >
-          {formatData(sale.saleDate)}
-        </Typography>
+          Marcar como entregue
+        </Button>
+        <CheckoutTable
+          filtered={ sale.products }
+          page={ page }
+          rowsPerPage={ rowsPerPage }
+          isDetail
+        />
+        <TablePagination
+          labelRowsPerPage="N° de colunas"
+          rowsPerPageOptions={ rowsPerPageOption }
+          component="div"
+          count={ sale.products.length }
+          rowsPerPage={ rowsPerPage }
+          page={ page }
+          onPageChange={ handleChangePage }
+          onRowsPerPageChange={ handleChangeRowsPerPage }
+        />
         <Typography
-          data-testid={ testids[user.role].detailsOrderDeliveryStatus }
+          component="h1"
+          variant="h5"
+          sx={ { mb: 2 } }
+          data-testid={ testids[user.role].detailsOrderTotalPrice }
         >
-          {sale.status}
+          { `Total Price: ${calcTotal()}` }
         </Typography>
-      </Container>
-      <Button
-        sx={ { mb: 2 } }
-        data-testid={ testids[user.role].detailsOrderDeliveryCheck }
-        disabled={ isDisabled }
-      >
-        Marcar como entregue
-      </Button>
-      <CheckoutTable
-        filtered={ sale.products }
-        page={ page }
-        rowsPerPage={ rowsPerPage }
-        isDetail
-      />
-      <TablePagination
-        labelRowsPerPage="N° de colunas"
-        rowsPerPageOptions={ rowsPerPageOption }
-        component="div"
-        count={ sale.products.length }
-        rowsPerPage={ rowsPerPage }
-        page={ page }
-        onPageChange={ handleChangePage }
-        onRowsPerPageChange={ handleChangeRowsPerPage }
-      />
-      <Typography
-        component="h1"
-        variant="h5"
-        sx={ { mb: 2 } }
-        data-testid={ testids[user.role].detailsOrderTotalPrice }
-      >
-        { `Total Price: ${calcTotal()}` }
-      </Typography>
-    </Grid>
+      </Grid>
+      { user.role === 'seller' ? (
+        <>
+          <Button
+            sx={ { mb: 2 } }
+            data-testid="seller_order_details__button-preparing-check"
+          >
+            Preparar Pedido
+          </Button>
+          <Button
+            sx={ { mb: 2 } }
+            data-testid="seller_order_details__button-dispatch-check"
+            disabled={ sale.status === 'Pendente' }
+          >
+            Saiu para entrega
+          </Button>
+        </>
+      ) : null }
+    </>
   );
 }
 
