@@ -28,6 +28,17 @@ const Login = () => {
   };
 
   useEffect(() => {
+    const user = JSON.parse(localStorage.getItem('user'));
+    if (user?.role === 'customer') {
+      navigate('/customer/products');
+    } else if (user?.role === 'seller') {
+      navigate('/seller/orders');
+    } else if (user?.role === 'admin') {
+      navigate('/admin');
+    }
+  }, []);
+
+  useEffect(() => {
     handleDisabled();
   }, [inputs]);
 
