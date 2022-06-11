@@ -1,4 +1,4 @@
-import { Grid, Paper, Typography } from '@mui/material';
+import { Grid, Paper, Typography, Button } from '@mui/material';
 import React, { useContext } from 'react';
 import PropTypes from 'prop-types';
 import { format } from 'date-fns';
@@ -22,15 +22,16 @@ const OrderCard = ({ id, status, saleDate, totalPrice }) => {
       alignItems="center"
       sx={ { backgroundColor: '#e4e4e4' } }
       component={ Paper }
-      onClick={ () => navigate(`/customer/orders/${id}`) }
+      onClick={ () => navigate(`/${user.role}/orders/${id}`) }
     >
       <Grid item xs={ 2 } sx={ { ...style, backgroundColor: '#ffffff' } }>
         <Typography>Pedido</Typography>
-        <Typography
+        <Button
           data-testid={ `${testids[user.role].orderCardID}${id}` }
+          onClick={ () => navigate(`/${user.role}/orders/${id}`) }
         >
           { id }
-        </Typography>
+        </Button>
       </Grid>
       <Grid
         fullWidth
