@@ -41,7 +41,7 @@ const OrderCard = ({ id, status, saleDate, totalPrice }) => {
         sx={ { ...style, backgroundColor: '#2FC18C' } }
         data-testid={ `${testids[user.role].orderCardStatus}${id}` }
       >
-        <Typography variant="h5">{ status.toUpperCase() }</Typography>
+        <Typography variant="h5">{ status }</Typography>
       </Grid>
       <Grid item xs={ 2 } fullWidth>
         <Typography
