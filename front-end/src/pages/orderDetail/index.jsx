@@ -134,7 +134,7 @@ function OrderDetail() {
         <Button
           sx={ { mb: 2 } }
           data-testid={ testids[user.role].detailsOrderDeliveryCheck }
-          /* disabled={ isDisabled } */
+          disabled={ isDisabled }
           onClick={ () => updateOrderStatus('Entregue') }
         >
           Marcar como entregue
