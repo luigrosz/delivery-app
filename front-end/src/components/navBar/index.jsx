@@ -36,7 +36,7 @@ const NavBar = () => {
           <Button
             size="large"
             color="inherit"
-            onClick={ () => navigate('/customer/checkout') }
+            onClick={ () => navigate('/customer/orders') }
             data-testid="customer_products__element-navbar-link-orders"
           >
             Meus Pedidos

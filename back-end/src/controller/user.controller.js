@@ -17,8 +17,9 @@ const loginController = async (req, res, _next) => {
     }
 
     const token = jwtGenerator({ email, password });
-    const { name, role } = isUserInDatabase;
-    return res.status(200).json({ email, name, role, token });
+
+    const { name, role, id } = isUserInDatabase;
+    return res.status(200).json({ email, name, role, token, id });
   } catch (e) {
     throw new Error(e);
   }
@@ -32,8 +33,8 @@ const registerController = async (req, res, _next) => {
       return res.status(409).json(result);
     }
     const token = jwtGenerator({ email, password });
-    const { role } = result;
-    return res.status(201).json({ name, email, role, token });
+    const { role, id } = result;
+    return res.status(201).json({ name, email, role, token, id });
   } catch (e) {
     throw new Error(e);
   }

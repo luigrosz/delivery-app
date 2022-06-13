@@ -24,12 +24,11 @@ const Provider = ({ children }) => {
   const fetchSellers = useCallback(async () => {
     const response = await fetch(`${APIURL}/seller`, {
       headers: {
-        token: user.token,
+        authorization: user.token,
       },
     });
     if (response.ok) {
       const data = await response.json();
-      console.log(data);
       setSellers(data);
     }
   }, [APIURL, user]);
@@ -53,6 +52,7 @@ const Provider = ({ children }) => {
       setUser(JSON.parse(savedUser));
     }
   }, []);
+
   const value = useMemo(() => ({
     APIURL,
     user,

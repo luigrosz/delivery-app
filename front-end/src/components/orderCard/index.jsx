@@ -1,13 +1,19 @@
-import { Grid, Paper, Typography } from '@mui/material';
+import { Grid, Paper, Typography, Button } from '@mui/material';
 import React, { useContext } from 'react';
 import PropTypes from 'prop-types';
+import { format } from 'date-fns';
+import { useNavigate } from 'react-router-dom';
 import { context } from '../../context';
 import testids from '../../helper/testids';
 
 const style = { display: 'flex', flexDirection: 'column', alignItems: 'center' };
 
-const OrderCard = ({ id, status, date, price }) => {
+const OrderCard = ({ id, status, saleDate, totalPrice }) => {
   const { user } = useContext(context);
+  const date = new Date(saleDate.toString());
+  const formatedDate = format(date, 'dd/MM/yy');
+
+  const navigate = useNavigate();
 
   return (
     <Grid
@@ -16,39 +22,39 @@ const OrderCard = ({ id, status, date, price }) => {
       alignItems="center"
       sx={ { backgroundColor: '#e4e4e4' } }
       component={ Paper }
+      onClick={ () => navigate(`/${user.role}/orders/${id}`) }
     >
-      <Grid item xs={ 1 } sx={ { ...style, backgroundColor: '#ffffff' } }>
-        <Typography variant="h6">Pedido</Typography>
-        <Typography
-          variant="h4"
+      <Grid item xs={ 2 } sx={ { ...style, backgroundColor: '#ffffff' } }>
+        <Typography>Pedido</Typography>
+        <Button
           data-testid={ `${testids[user.role].orderCardID}${id}` }
+          onClick={ () => navigate(`/${user.role}/orders/${id}`) }
         >
           { id }
-        </Typography>
+        </Button>
       </Grid>
       <Grid
+        fullWidth
         item
         xs={ 4 }
         component={ Paper }
         sx={ { ...style, backgroundColor: '#2FC18C' } }
         data-testid={ `${testids[user.role].orderCardStatus}${id}` }
       >
-        <Typography variant="h2">{ status.toUpperCase() }</Typography>
+        <Typography variant="h5">{ status }</Typography>
       </Grid>
-      <Grid item xs={ 2 }>
+      <Grid item xs={ 2 } fullWidth>
         <Typography
-          variant="h4"
           sx={ { ...style, backgroundColor: '#ffffff' } }
           data-testid={ `${testids[user.role].orderCardDate}${id}` }
         >
-          { date }
+          { formatedDate }
         </Typography>
         <Typography
-          variant="h4"
           sx={ { ...style, backgroundColor: '#ffffff' } }
           data-testid={ `${testids[user.role].orderCardPrice}${id}` }
         >
-          { `R$${price}` }
+          { `R$${totalPrice}` }
         </Typography>
       </Grid>
     </Grid>
@@ -58,8 +64,8 @@ const OrderCard = ({ id, status, date, price }) => {
 OrderCard.propTypes = {
   id: PropTypes.number.isRequired,
   status: PropTypes.string.isRequired,
-  date: PropTypes.string.isRequired,
-  price: PropTypes.number.isRequired,
+  saleDate: PropTypes.string.isRequired,
+  totalPrice: PropTypes.string.isRequired,
 };
 
 export default OrderCard;

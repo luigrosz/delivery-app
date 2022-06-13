@@ -1,9 +1,10 @@
 const {
-  postSaleService,
   getAllSalesService,
   getSaleByIdSellerService,
   getSaleByIdUserService,
-  updateSaleStatusByIdService } = require('../service/sale.service');
+  getSaleByIdSaleService, 
+  updateSaleStatusByIdService, 
+  createSaleAndAll } = require('../service/sale.service');
 
 const getAllSalesController = async (_req, res, _next) => {
   try {
@@ -16,21 +17,11 @@ const getAllSalesController = async (_req, res, _next) => {
 
 const postSaleController = async (req, res, _next) => {
   try {
-    const sale = await postSaleService(req.body, req.user);
+    const { deliveryAddress, deliveryNumber, products, sellerId, totalPrice } = req.body;
+    const sale = await createSaleAndAll(
+      { deliveryAddress, deliveryNumber, products, sellerId, totalPrice }, req.user,
+    );
     return res.status(201).json(sale);
-  } catch (e) {
-    throw new Error(e);
-  }
-};
-
-const getSaleByIdUserController = async (req, res, _next) => {
-  try {
-    const { id } = req.params;
-    const sales = await getSaleByIdUserService(id);
-    if (sales === null) {
-      return res.status(200).json([]);
-    }
-    return res.status(200).json(sales);
   } catch (error) {
     throw new Error(error);
   }
@@ -49,10 +40,23 @@ const getSaleByIdSellerController = async (req, res, _next) => {
   }
 };
 
+const getSaleByIdUserController = async (req, res, _next) => {
+  try {
+    const { id } = req.params;
+    const sales = await getSaleByIdUserService(id);
+    if (sales === null) {
+      return res.status(200).json([]);
+    }
+    return res.status(200).json(sales);
+  } catch (error) {
+    throw new Error(error);
+  }
+};
+
 const getSaleByIdSaleController = async (req, res, _next) => {
   try {
     const { id } = req.params;
-    const sale = await getSaleByIdUserService(id);
+    const sale = await getSaleByIdSaleService(id);
     if (sale === null) {
       return res.status(200).json([]);
     }

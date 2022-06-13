@@ -11,9 +11,18 @@ import { Button } from '@mui/material';
 import { context } from '../../context';
 import testids from '../../helper/testids';
 
-function CheckoutTable({ filtered, page, rowsPerPage, handleRemove }) {
+function CheckoutTable({ filtered, page, rowsPerPage, handleRemove, isDetail }) {
   const { user } = useContext(context);
   const createDataTest = (testid, id) => `${testid}${id}`;
+  const dataTestIdValue = (str, index) => {
+    const base = testids[user.role];
+    if (isDetail) {
+      return (typeof index === 'number')
+        ? `${base[str.replace('checkout', 'details')]}${index}`
+        : base[str.replace('checkout', 'details')];
+    }
+    return (typeof index === 'number') ? `${base[str]}${index}` : base[str];
+  };
 
   return (
     <TableContainer
@@ -41,9 +50,12 @@ function CheckoutTable({ filtered, page, rowsPerPage, handleRemove }) {
             <TableCell align="right">
               Sub-total
             </TableCell>
-            <TableCell align="right">
-              Remove Item
-            </TableCell>
+            {(handleRemove)
+              ? (
+                <TableCell align="right">
+                  Remove Item
+                </TableCell>
+              ) : null}
           </TableRow>
         </TableHead>
         <TableBody>
@@ -53,49 +65,54 @@ function CheckoutTable({ filtered, page, rowsPerPage, handleRemove }) {
               <TableRow key={ prod.id }>
                 <TableCell
                   align="left"
-                  data-testid={ `${testids[user.role].checkoutTableItemNumber}${index}` }
+                  data-testid={ dataTestIdValue('checkoutTableItemNumber', index) }
                 >
                   { index + 1 }
                 </TableCell>
                 <TableCell
                   align="center"
-                  data-testid={ `${testids[user.role].checkoutTableItemName}${index}` }
+                  data-testid={ dataTestIdValue('checkoutTableItemName', index) }
                 >
                   { prod.name }
                 </TableCell>
                 <TableCell
                   align="right"
-                  data-testid={ `${testids[user.role].checkoutTableItemQnt}${index}` }
+                  data-testid={ dataTestIdValue('checkoutTableItemQnt', index) }
                 >
                   { prod.quantity }
                 </TableCell>
                 <TableCell
                   align="right"
-                  data-testid={ `${testids[user.role].checkoutTableItemUnit}${index}` }
+                  data-testid={ dataTestIdValue('checkoutTableItemUnit', index) }
 
                 >
-                  { prod.price.toFixed(2).toString().replace('.', ',') }
+                  { (+prod.price).toFixed(2).toString().replace('.', ',') }
                 </TableCell>
                 <TableCell
                   align="right"
-                  data-testid={ `${testids[user.role].checkoutTableItemSub}${index}` }
+                  data-testid={ dataTestIdValue('checkoutTableItemSub', index) }
                 >
-                  { (prod.price * prod.quantity).toFixed(2).toString().replace('.', ',') }
+                  { ((+prod.price) * prod.quantity)
+                    .toFixed(2).toString().replace('.', ',') }
                 </TableCell>
-                <TableCell
-                  align="right"
-                >
-                  <Button
-                    variant="outlined"
-                    onClick={ () => handleRemove(prod.id) }
-                    data-testid={ createDataTest(
-                      'customer_checkout__element-order-table-remove-',
-                      index,
-                    ) }
-                  >
-                    Remover Item
-                  </Button>
-                </TableCell>
+                { (handleRemove)
+                  ? (
+                    <TableCell
+                      align="right"
+                    >
+                      <Button
+                        variant="outlined"
+                        onClick={ () => handleRemove(prod.id) }
+                        data-testid={ createDataTest(
+                          'customer_checkout__element-order-table-remove-',
+                          index,
+                        ) }
+                      >
+                        Remover Item
+                      </Button>
+                    </TableCell>
+                  )
+                  : undefined}
               </TableRow>
             ))}
         </TableBody>
@@ -115,8 +132,14 @@ CheckoutTable.propTypes = {
     }),
   ).isRequired,
   page: PropTypes.number.isRequired,
-  handleRemove: PropTypes.func.isRequired,
+  handleRemove: PropTypes.func,
+  isDetail: PropTypes.bool,
   rowsPerPage: PropTypes.number.isRequired,
+};
+
+CheckoutTable.defaultProps = {
+  handleRemove: null,
+  isDetail: false,
 };
 
 export default CheckoutTable;
