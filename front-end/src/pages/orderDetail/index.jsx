@@ -178,7 +178,7 @@ function OrderDetail() {
             sx={ { mb: 2 } }
             data-testid="seller_order_details__button-dispatch-check"
             disabled={ sale.status !== 'Preparando' }
-            onClick={ () => updateOrderStatus('Entregue') }
+            onClick={ () => updateOrderStatus('Em Trânsito') }
           >
             Saiu para entrega
           </Button>
