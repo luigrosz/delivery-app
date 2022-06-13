@@ -45,15 +45,10 @@ function OrderDetail() {
         Authorization: user.token,
         'Content-Type': 'application/json',
       },
-      body: { status },
+      body: JSON.stringify({ status }),
     });
     if (response.ok) {
-      setSale((prevSale) => prevSale.map((item) => {
-        if (item.id === id) {
-          return { ...item, status };
-        }
-        return item;
-      }));
+      setSale((prevSale) => ({ ...prevSale, status }));
     }
   };
 
