@@ -11,7 +11,7 @@ const style = { display: 'flex', flexDirection: 'column', alignItems: 'center' }
 const OrderCard = ({ id, status, saleDate, totalPrice }) => {
   const { user } = useContext(context);
   const date = new Date(saleDate.toString());
-  const formatedDate = format(date, 'dd/MM/yy');
+  const formatedDate = format(date, 'dd/MM/yyyy');
 
   const navigate = useNavigate();
 
