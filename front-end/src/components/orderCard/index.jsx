@@ -54,7 +54,7 @@ const OrderCard = ({ id, status, saleDate, totalPrice }) => {
           sx={ { ...style, backgroundColor: '#ffffff' } }
           data-testid={ `${testids[user.role].orderCardPrice}${id}` }
         >
-          { `R$${totalPrice}` }
+          { `${totalPrice.toFixed(2).toString().replace('.', ',')}` }
         </Typography>
       </Grid>
     </Grid>
