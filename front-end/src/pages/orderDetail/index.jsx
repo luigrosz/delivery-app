@@ -169,15 +169,15 @@ function OrderDetail() {
           <Button
             sx={ { mb: 2 } }
             data-testid="seller_order_details__button-preparing-check"
+            disabled={ sale.status !== 'Pendente' }
             onClick={ () => updateOrderStatus('Preparando') }
-
           >
             Preparar Pedido
           </Button>
           <Button
             sx={ { mb: 2 } }
             data-testid="seller_order_details__button-dispatch-check"
-            disabled={ sale.status === 'Pendente' }
+            disabled={ sale.status !== 'Preparando' }
             onClick={ () => updateOrderStatus('Entregue') }
           >
             Saiu para entrega
