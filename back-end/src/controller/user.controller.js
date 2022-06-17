@@ -57,10 +57,10 @@ const registerByAdminController = async (req, res, _next) => {
     const { email } = req.user;
     const user = await registerByAdminService(req.body, email);
     if (!user) {
-      return res.status(401).json({ error: 'Somente administradores podem fazer isso.' });
+      return res.status(409).json({ error: 'Somente administradores podem fazer isso.' });
     }
     if (typeof user === 'string') {
-      return res.status(401).json(user);
+      return res.status(409).json(user);
     }
     return res.status(201).json(user);
   } catch (error) {
