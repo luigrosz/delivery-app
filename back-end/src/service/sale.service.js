@@ -112,13 +112,8 @@ const getSaleByIdSaleService = async (id) => {
   }
 };
 
-const updateSaleStatusByIdService = async (id, user, status) => {
+const updateSaleStatusByIdService = async (id, status) => {
   try {
-    const { email } = user;
-    const getUser = await users.findOne({ where: { email } });
-    if (getUser.role === 'customer') {
-      return null;
-    }
     const updatedSale = await sales.update({ status }, {
       where: { 
         id,

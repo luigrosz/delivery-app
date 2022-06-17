@@ -38,6 +38,20 @@ function OrderDetail() {
     setPage(0);
   };
 
+  const updateOrderStatus = async (status) => {
+    const response = await fetch(`${APIURL}/sale/${id}/status`, {
+      method: 'PATCH',
+      headers: {
+        Authorization: user.token,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ status }),
+    });
+    if (response.ok) {
+      setSale((prevSale) => ({ ...prevSale, status }));
+    }
+  };
+
   const fetchSaleById = useCallback(async () => {
     const response = await fetch(`${APIURL}/sale/${id}`, {
       headers: {
@@ -121,6 +135,7 @@ function OrderDetail() {
           sx={ { mb: 2 } }
           data-testid={ testids[user.role].detailsOrderDeliveryCheck }
           disabled={ isDisabled }
+          onClick={ () => updateOrderStatus('Entregue') }
         >
           Marcar como entregue
         </Button>
@@ -154,13 +169,16 @@ function OrderDetail() {
           <Button
             sx={ { mb: 2 } }
             data-testid="seller_order_details__button-preparing-check"
+            disabled={ sale.status !== 'Pendente' }
+            onClick={ () => updateOrderStatus('Preparando') }
           >
             Preparar Pedido
           </Button>
           <Button
             sx={ { mb: 2 } }
             data-testid="seller_order_details__button-dispatch-check"
-            disabled={ sale.status === 'Pendente' }
+            disabled={ sale.status !== 'Preparando' }
+            onClick={ () => updateOrderStatus('Em Trânsito') }
           >
             Saiu para entrega
           </Button>

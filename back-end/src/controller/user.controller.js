@@ -16,9 +16,10 @@ const loginController = async (req, res, _next) => {
       return res.status(404).json({ error: 'Not Found' });
     }
 
-    const token = jwtGenerator({ email, password });
-
     const { name, role, id } = isUserInDatabase;
+
+    const token = jwtGenerator({ email, role, name, password });
+
     return res.status(200).json({ email, name, role, token, id });
   } catch (e) {
     throw new Error(e);

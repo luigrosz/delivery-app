@@ -69,10 +69,8 @@ const getSaleByIdSaleController = async (req, res, _next) => {
 const updateSaleStatusByIdController = async (req, res, _next) => {
   try {
     const { id } = req.params;
-    const { userId, sellerId, totalPrice,
-       deliveryAddress, deliveryNumber, status } = req.body;
-    const params = { userId, sellerId, totalPrice, deliveryAddress, deliveryNumber, status };
-    const sale = await updateSaleStatusByIdService(id, req.user, params);
+    const { status } = req.body;
+    const sale = await updateSaleStatusByIdService(id, status, req.user);
     if (!sale) {
       return res.status(401).json({ error: 'Customers cannot update sales.' });
     }
