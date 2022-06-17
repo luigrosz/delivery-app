@@ -34,7 +34,7 @@ const Login = () => {
     } else if (user?.role === 'seller') {
       navigate('/seller/orders');
     } else if (user?.role === 'admin') {
-      navigate('/admin');
+      navigate('/admin/manage');
     }
   }, []);
 
@@ -65,7 +65,7 @@ const Login = () => {
     } else if (data.role === 'seller') {
       navigate('/seller/orders');
     } else {
-      navigate('/admin');
+      navigate('/admin/manage');
     }
   };
 

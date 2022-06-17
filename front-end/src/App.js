@@ -10,6 +10,7 @@ import Products from './pages/products';
 import Signin from './pages/signin';
 import Orders from './pages/orders';
 import OrderDetail from './pages/orderDetail';
+import Admin from './pages/admin';
 
 function App() {
   return (
@@ -28,6 +29,9 @@ function App() {
           <Route path="/seller" element={ <NavBar /> }>
             <Route path="orders" element={ <Orders /> } />
             <Route path="orders/:id" element={ <OrderDetail /> } />
+          </Route>
+          <Route path="/admin" element={ <NavBar /> }>
+            <Route path="manage" element={ <Admin /> } />
           </Route>
           <Route
             path="/loading"
