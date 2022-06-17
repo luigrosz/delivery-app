@@ -68,7 +68,7 @@ const allUsersService = async () => {
   } catch (e) {
     throw new Error(e);
   }
-}
+};
 
 module.exports = {
   registerService,
@@ -76,6 +76,5 @@ module.exports = {
   allSellersService,
   findUserByIdService,
   registerByAdminService,
-  allSellersService,
   allUsersService,
 }; 
