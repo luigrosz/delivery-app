@@ -62,7 +62,7 @@ function OrderDetail() {
       const data = await response.json();
       data.products = data.products.map((p) => ({ ...p, price: +p.price }));
       setSale(data);
-      if (data.status !== 'Pendente') {
+      if (data.status !== 'Em Trânsito') {
         setIsDisabled(false);
       }
     }
