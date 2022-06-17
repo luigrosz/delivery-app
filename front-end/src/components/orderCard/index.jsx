@@ -11,7 +11,7 @@ const style = { display: 'flex', flexDirection: 'column', alignItems: 'center' }
 const OrderCard = ({ id, status, saleDate, totalPrice }) => {
   const { user } = useContext(context);
   const date = new Date(saleDate.toString());
-  const formatedDate = format(date, 'dd/MM/yy');
+  const formatedDate = format(date, 'dd/MM/yyyy');
 
   const navigate = useNavigate();
 
@@ -54,7 +54,7 @@ const OrderCard = ({ id, status, saleDate, totalPrice }) => {
           sx={ { ...style, backgroundColor: '#ffffff' } }
           data-testid={ `${testids[user.role].orderCardPrice}${id}` }
         >
-          { `R$${totalPrice}` }
+          { `${totalPrice.replace('.', ',')}` }
         </Typography>
       </Grid>
     </Grid>
