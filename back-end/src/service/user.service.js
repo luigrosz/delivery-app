@@ -61,10 +61,21 @@ const allSellersService = async () => {
   }
 };
 
+const allUsersService = async () => {
+  try {
+    const allUsers = await users.findAll();
+    return allUsers;
+  } catch (e) {
+    throw new Error(e);
+  }
+}
+
 module.exports = {
   registerService,
   loginService,
   allSellersService,
   findUserByIdService,
   registerByAdminService,
+  allSellersService,
+  allUsersService,
 }; 

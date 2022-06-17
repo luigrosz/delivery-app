@@ -3,6 +3,7 @@ const { loginService,
   allSellersService,
   findUserByIdService,
   registerByAdminService,
+  allUsersService,
 } = require('../service/user.service');
 const jwtGenerator = require('../helpers/jwtGenerator');
 
@@ -16,9 +17,10 @@ const loginController = async (req, res, _next) => {
       return res.status(404).json({ error: 'Not Found' });
     }
 
-    const token = jwtGenerator({ email, password });
-
     const { name, role, id } = isUserInDatabase;
+
+    const token = jwtGenerator({ email, role, name, password });
+
     return res.status(200).json({ email, name, role, token, id });
   } catch (e) {
     throw new Error(e);
@@ -60,7 +62,7 @@ const registerByAdminController = async (req, res, _next) => {
     if (typeof user === 'string') {
       return res.status(401).json(user);
     }
-    return res.status(200).json(user);
+    return res.status(201).json(user);
   } catch (error) {
     throw new Error(error);
   }
@@ -75,10 +77,20 @@ const getAllSellers = async (_req, res, _next) => {
   }
 };
 
+const getAllUsers = async (_req, res, _next) => {
+  try {
+    const users = await allUsersService();
+    return res.status(200).json(users);
+  } catch (e) {
+    throw new Error(e);
+  }
+};
+
 module.exports = {
   loginController,
   registerController,
   getAllSellers,
   registerByAdminController,
   findUserByIdController,
+  getAllUsers,
 };
