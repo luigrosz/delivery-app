@@ -1,9 +1,11 @@
 import React, { useEffect, useState, useContext } from 'react';
 import {
+  Alert,
   Button,
   Grid,
   Paper,
   Select,
+  Snackbar,
   TextField,
   Typography,
 } from '@mui/material';
@@ -14,6 +16,7 @@ const Admin = () => {
   const { APIURL, setUser } = useContext(context);
   const [inputs, setInputs] = useState({ email: '', name: '', password: '', role: '' });
   const [isDisabled, setIsDisabled] = useState(false);
+  const [alreadyExists, setAlreadyExists] = useState(false);
 
   const inputsHandler = ({ target: { name, value } }) => {
     setInputs({ ...inputs, [name]: value });
@@ -35,8 +38,18 @@ const Admin = () => {
         }),
       });
     const data = await response.json();
+    const notUniqueEmail = 409;
+    if (response.status === notUniqueEmail) {
+      return setAlreadyExists(true);
+    }
     setUser(data);
-    // setInputs({ email: '', name: '', password: '', role: '' });
+  };
+
+  const handleClose = (e, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+    setAlreadyExists(false);
   };
 
   useEffect(() => {
@@ -134,6 +147,21 @@ const Admin = () => {
         </Grid>
       </Grid>
       <AdminUserTable />
+      <Snackbar
+        open={ alreadyExists }
+        autoHideDuration={ 60000 }
+        onClose={ handleClose }
+        anchorOrigin={ { horizontal: 'center', vertical: 'top' } }
+      >
+        <Alert
+          onClose={ handleClose }
+          severity="error"
+          sx={ { width: '100%' } }
+          data-testid="admin_manage__element-invalid-register"
+        >
+          Já tem um usuario com esse E-mail, seu topeira!
+        </Alert>
+      </Snackbar>
     </>
   );
 };
