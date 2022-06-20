@@ -71,9 +71,8 @@ const allUsersService = async () => {
 };
 
 const deleteUserService = async (email) => {
-  try { 
-    const user = await users.findOne({ where: { email } });
-    await user.destroy();
+  try {
+    const user = await users.destroy({ where: { email } });
     return user;
   } catch (e) {
     throw new Error(e);
