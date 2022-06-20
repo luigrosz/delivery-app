@@ -70,6 +70,16 @@ const allUsersService = async () => {
   }
 };
 
+const deleteUserService = async (email) => {
+  try { 
+    const user = await users.findOne({ where: { email } });
+    await user.destroy();
+    return user;
+  } catch (e) {
+    throw new Error(e);
+  }
+};
+
 module.exports = {
   registerService,
   loginService,
@@ -77,4 +87,5 @@ module.exports = {
   findUserByIdService,
   registerByAdminService,
   allUsersService,
+  deleteUserService,
 }; 

@@ -4,6 +4,7 @@ const { loginService,
   findUserByIdService,
   registerByAdminService,
   allUsersService,
+  deleteUserService,
 } = require('../service/user.service');
 const jwtGenerator = require('../helpers/jwtGenerator');
 
@@ -86,6 +87,19 @@ const getAllUsers = async (_req, res, _next) => {
   }
 };
 
+
+
+const deletuserControllers = async (req, res, _next) => {
+  try {
+    const { email } = req.body;
+    console.log(email);
+    const deletedUser = await deleteUserService(email)
+    return res.status(200).json(deletedUser);
+  } catch (e) {
+    throw new Error(e);
+  }
+};
+
 module.exports = {
   loginController,
   registerController,
@@ -93,4 +107,5 @@ module.exports = {
   registerByAdminController,
   findUserByIdController,
   getAllUsers,
+  deletuserControllers,
 };

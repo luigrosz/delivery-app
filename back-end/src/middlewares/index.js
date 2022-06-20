@@ -5,6 +5,7 @@ const validateJWT = require('./validateJWT');
 const validateObjects = require('./validateObjects');
 const validateRole = require('./validateRole');
 const validateStatusMod = require('./validadeStatusMod');
+const validateAdmin = require('./validateAdmin');
 
 module.exports = {
   validateEmail,
@@ -14,4 +15,5 @@ module.exports = {
   validateObjects,
   validateRole,
   validateStatusMod,
+  validateAdmin,
 }; 
