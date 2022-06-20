@@ -1,12 +1,12 @@
-const { allProdutService,
+const { allProductsService,
   productsByIdService,
   editProductService,
   deleteProductService,
-} = require('../service/produts.service');
+} = require('../service/products.service');
 
 const getAllProductsController = async (_req, res, _next) => {
   try {
-    const products = await allProdutService();
+    const products = await allProductsService();
     return res.status(200).json(products);
   } catch (e) {
     throw new Error(e);

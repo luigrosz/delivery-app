@@ -1,6 +1,6 @@
 const { products } = require('../database/models');
 
-const allProdutService = async () => {
+const allProductsService = async () => {
   try {
     const productsAll = await products.findAll();
     return productsAll;
@@ -37,7 +37,7 @@ const deleteProductService = async (id) => {
 };
 
 module.exports = {
-  allProdutService,
+  allProductsService,
   productsByIdService,
   editProductService,
   deleteProductService,
