@@ -87,12 +87,10 @@ const getAllUsers = async (_req, res, _next) => {
   }
 };
 
-
-
 const deletuserControllers = async (req, res, _next) => {
   try {
     const { email } = req.body;
-    const deletedUser = await deleteUserService(email)
+    const deletedUser = await deleteUserService(email);
     return res.status(200).json(deletedUser);
   } catch (e) {
     throw new Error(e);

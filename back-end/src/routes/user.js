@@ -11,7 +11,6 @@ router.get(
   getAllUsers,
 );
 
-router.delete('/',validateJWT, validateAdmin, deletuserControllers);
-
+router.delete('/', validateJWT, validateAdmin, deletuserControllers);
 
 module.exports = router;
