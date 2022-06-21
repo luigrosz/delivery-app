@@ -21,13 +21,7 @@ const Products = () => {
 
   return (
     <>
-      <div
-        style={ {
-          display: 'flex',
-          flexDirection: 'row',
-          flexWrap: 'wrap',
-        } }
-      >
+      <div className="center-products">
         { products.map((product) => (
           <ProductCard
             key={ product.name }
@@ -35,17 +29,20 @@ const Products = () => {
           />
         ))}
       </div>
-      <Button
-        type="submit"
-        variant="contained"
-        disabled={ disabled }
-        data-testid="customer_products__button-cart"
-        onClick={ () => navigate('/customer/checkout') }
-      >
-        <Typography data-testid="customer_products__checkout-bottom-value">
-          {`Ver Carrinho: R$ ${totalPrice.toString().replace('.', ',')}`}
-        </Typography>
-      </Button>
+      <div className="center-products">
+        <Button
+          type="submit"
+          variant="contained"
+          disabled={ disabled }
+          sx={ { mb: 1 } }
+          data-testid="customer_products__button-cart"
+          onClick={ () => navigate('/customer/checkout') }
+        >
+          <Typography data-testid="customer_products__checkout-bottom-value">
+            {`Ver Carrinho: R$ ${totalPrice.toString().replace('.', ',')}`}
+          </Typography>
+        </Button>
+      </div>
     </>
   );
 };

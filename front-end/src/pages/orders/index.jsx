@@ -27,7 +27,7 @@ const Orders = () => {
   return (
     <Grid container component={ Paper } spacing={ 2 }>
       { orders.map((order) => (
-        <Grid item xs={ 4 } key={ order.id }>
+        <Grid item md={ 4 } xs={ 12 } key={ order.id }>
           <OrderCard
             { ...order }
             saleDate={ order.saleDate }
