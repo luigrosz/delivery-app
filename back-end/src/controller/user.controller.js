@@ -9,27 +9,17 @@ const { loginService,
 const jwtGenerator = require('../helpers/jwtGenerator');
 
 const loginController = async (req, res, _next) => {
-  try {
     const { email, password } = req.body;
-
     const isUserInDatabase = await loginService(email, password);
-
     if (isUserInDatabase === null) {
       return res.status(404).json({ error: 'Not Found' });
     }
-
     const { name, role, id } = isUserInDatabase;
-
     const token = jwtGenerator({ email, role, name, password });
-
     return res.status(200).json({ email, name, role, token, id });
-  } catch (e) {
-    throw new Error(e);
-  }
 };
 
 const registerController = async (req, res, _next) => {
-  try {
     const { name, email, password } = req.body;
     const result = await registerService(email, password, name);
     if ('error' in result) {
@@ -38,9 +28,6 @@ const registerController = async (req, res, _next) => {
     const token = jwtGenerator({ email, password });
     const { role, id } = result;
     return res.status(201).json({ name, email, role, token, id });
-  } catch (e) {
-    throw new Error(e);
-  }
 };
 
 const findUserByIdController = async (req, res, _next) => {
@@ -70,12 +57,8 @@ const registerByAdminController = async (req, res, _next) => {
 };
 
 const getAllSellers = async (_req, res, _next) => {
-  try {
     const sellers = await allSellersService();
     return res.status(200).json(sellers);
-  } catch (e) {
-    throw new Error(e);
-  }
 };
 
 const getAllUsers = async (_req, res, _next) => {

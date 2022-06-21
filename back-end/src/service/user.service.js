@@ -5,18 +5,13 @@ const { users } = require('../database/models');
 const { registerNewUser } = require('../helpers/dbHelper');
 
 const loginService = async (email, password) => {
-  try {
     const md5Password = md5(password);
     const result = await users.findOne({ where: { email, password: md5Password } });
     return result;
-  } catch (e) {
-    throw new Error(e);
-  }
 };
 
 const registerService = async (email, password, name) => {
   try {
-    await users.findOne({ where: { email } });
     const md5Password = md5(password);
     const created = await users.create({ name, email, password: md5Password, role: 'customer' });
     return created;
@@ -26,12 +21,8 @@ const registerService = async (email, password, name) => {
 };
 
 const findUserByIdService = async (id) => {
-  try {
     const user = await users.findOne({ where: { id } });
     return user;
-  } catch (error) {
-    throw new Error(error);
-  }
 };
 
 const registerByAdminService = async (registerUser, emailAdmin) => {
@@ -53,12 +44,8 @@ const registerByAdminService = async (registerUser, emailAdmin) => {
 };
 
 const allSellersService = async () => {
-  try {
     const sellers = await users.findAll({ where: { role: 'seller' } });
     return sellers;
-  } catch (e) {
-    throw new Error(e);
-  }
 };
 
 const allUsersService = async () => {

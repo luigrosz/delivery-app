@@ -28,7 +28,6 @@ const createSaleAndAll = async (sale, user) => {
     await createProductAssociation(sale.products, saleId.id);
     return { saleId: saleId.id };
   } catch (error) {
-    console.log(error);
     return error;
   }
 };
@@ -64,65 +63,45 @@ const mapAllSales = async (allSales) => {
 };
 
 const getAllSalesService = async () => {
-  try {
     const allSales = await sales.findAll({ include:
       [{ model: users, as: 'customer', attributes: ['name'] },
       { model: users, as: 'seller', attributes: ['name'] }] });
     const mappedSales = mapAllSales(allSales);
     return mappedSales;
-  } catch (error) {
-    throw new Error(error);
-  }
 };
 
 const getSaleByIdSellerService = async (id) => {
-  try {
     const allSales = await sales.findAll({ where: { [sellerIdSnake]: id },
       include: [{ model: users, as: 'customer', attributes: ['name'] },
       { model: users, as: 'seller', attributes: ['name'] }] });
       const mappedSales = mapAllSales(allSales);
       return mappedSales;
-  } catch (error) {
-    throw new Error(error);
-  }
 };
 
 const getSaleByIdUserService = async (id) => {
-  try {
     const allSales = await sales.findAll({ where: { userId: id },
       include: [{ model: users, as: 'customer', attributes: ['name'] },
       { model: users, as: 'seller', attributes: ['name'] }] });
     const mappedSales = mapAllSales(allSales);
     return mappedSales;
-  } catch (error) {
-    throw new Error(error);
-  }
 };
 
 const getSaleByIdSaleService = async (id) => {
-  try {
     const saleObject = await sales.findOne({ where: { id },
       include: [{ model: users, as: 'customer', attributes: ['name'] },
       { model: users, as: 'seller', attributes: ['name'] }] });
     const prod = await getProductsOfSale(saleObject.id);
     const filteredItens = filterSaleItens(saleObject);
     return { ...filteredItens, products: prod };
-  } catch (e) {
-    throw new Error(e);
-  }
 };
 
 const updateSaleStatusByIdService = async (id, status) => {
-  try {
     const updatedSale = await sales.update({ status }, {
       where: { 
         id,
       },
     }); 
     return updatedSale;
-  } catch (error) {
-    throw new Error(error);
-  }
 };
 
 module.exports = {
