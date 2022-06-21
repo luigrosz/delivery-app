@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useContext, useCallback } from 'react';
+import React, { useEffect, useContext } from 'react';
 import {
   Paper,
   TableContainer,
@@ -12,21 +12,7 @@ import { context } from '../../context';
 import UserTableRoll from './UserTableRoll';
 
 const AdminUserTable = () => {
-  const { APIURL } = useContext(context);
-  const [users, setUsers] = useState([]);
-
-  const fetchUsers = useCallback(async () => {
-    const { token } = JSON.parse(localStorage.getItem('user'));
-    const response = await fetch(`${APIURL}/user`, {
-      headers: {
-        authorization: token,
-      },
-    });
-    if (response.ok) {
-      const data = await response.json();
-      setUsers(data);
-    }
-  }, [APIURL]);
+  const { users, fetchUsers } = useContext(context);
 
   useEffect(() => {
     fetchUsers();

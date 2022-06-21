@@ -8,7 +8,7 @@ import PropTypes from 'prop-types';
 import { context } from '../../context';
 
 const UserTableRoll = ({ index, name, email, role }) => {
-  const { APIURL } = useContext(context);
+  const { APIURL, fetchUsers } = useContext(context);
 
   const handleDelete = async () => {
     const { token } = JSON.parse(localStorage.getItem('user'));
@@ -21,6 +21,7 @@ const UserTableRoll = ({ index, name, email, role }) => {
       },
       body: JSON.stringify({ email }),
     });
+    fetchUsers();
   };
 
   return (

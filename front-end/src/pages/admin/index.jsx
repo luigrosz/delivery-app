@@ -122,7 +122,7 @@ const Admin = () => {
           <Select
             native
             fullWidth
-            label="Tipo"
+            label="tipo"
             inputProps={ { 'data-testid': 'admin_manage__select-role' } }
             onChange={ inputsHandler }
             name="role"
