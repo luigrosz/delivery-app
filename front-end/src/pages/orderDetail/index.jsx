@@ -49,6 +49,7 @@ function OrderDetail() {
     });
     if (response.ok) {
       setSale((prevSale) => ({ ...prevSale, status }));
+      setIsDisabled(true);
     }
   };
 
@@ -106,7 +107,7 @@ function OrderDetail() {
         sx={ {
           display: 'flex',
           justifyContent: 'space-between',
-          width: '70%',
+          width: { md: '70%', xs: '100%' },
           mb: 4,
         } }
       >
