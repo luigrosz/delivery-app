@@ -62,7 +62,8 @@ function OrderDetail() {
       const data = await response.json();
       data.products = data.products.map((p) => ({ ...p, price: +p.price }));
       setSale(data);
-      if (data.status !== 'Pendente') {
+      console.log(data.status);
+      if (data.status === 'Em Trânsito') {
         setIsDisabled(false);
       }
     }
@@ -83,54 +84,54 @@ function OrderDetail() {
   ).toFixed(2).toString().replace('.', ',');
 
   return (
-    <>
-      <Grid
-        container
-        component="main"
+    <Grid
+      container
+      component="main"
+      sx={ {
+        height: '100%',
+        width: '100%',
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        flexWrap: 'nowrap',
+        justifyContent: 'center',
+        backgroundColor: 'white',
+      } }
+    >
+      <Typography component="h1" variant="h5" sx={ { mb: 2, mt: 1 } }>
+        Detalhe do Pedido
+      </Typography>
+      <Container
+        component={ Paper }
         sx={ {
-          height: '100%',
-          width: '100%',
           display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          flexWrap: 'nowrap',
-          justifyContent: 'center',
-          backgroundColor: 'white',
+          justifyContent: 'space-between',
+          width: '70%',
+          mb: 4,
         } }
       >
-        <Typography component="h1" variant="h5" sx={ { mb: 2, mt: 1 } }>
-          Detalhe do Pedido
-        </Typography>
-        <Container
-          component={ Paper }
-          sx={ {
-            display: 'flex',
-            justifyContent: 'space-between',
-            width: '70%',
-            mb: 4,
-          } }
+        <Typography
+          data-testid={ testids[user.role].detailsOrderId }
         >
-          <Typography
-            data-testid={ testids[user.role].detailsOrderId }
-          >
-            {formatOrderDigits(sale.id)}
-          </Typography>
-          <Typography
-            data-testid={ testids[user.role].detailsOrderSellerName }
-          >
-            {`P. Vend: ${sale.seller.name}`}
-          </Typography>
-          <Typography
-            data-testid={ testids[user.role].detailsOrderDate }
-          >
-            {formatData(sale.saleDate)}
-          </Typography>
-          <Typography
-            data-testid={ testids[user.role].detailsOrderDeliveryStatus }
-          >
-            {sale.status}
-          </Typography>
-        </Container>
+          {formatOrderDigits(sale.id)}
+        </Typography>
+        <Typography
+          data-testid={ testids[user.role].detailsOrderSellerName }
+        >
+          {`P. Vend: ${sale.seller.name}`}
+        </Typography>
+        <Typography
+          data-testid={ testids[user.role].detailsOrderDate }
+        >
+          {formatData(sale.saleDate)}
+        </Typography>
+        <Typography
+          data-testid={ testids[user.role].detailsOrderDeliveryStatus }
+        >
+          {sale.status}
+        </Typography>
+      </Container>
+      {user.role === 'customer' ? (
         <Button
           sx={ { mb: 2 } }
           data-testid={ testids[user.role].detailsOrderDeliveryCheck }
@@ -138,53 +139,52 @@ function OrderDetail() {
           onClick={ () => updateOrderStatus('Entregue') }
         >
           Marcar como entregue
-        </Button>
-        <CheckoutTable
-          filtered={ sale.products }
-          page={ page }
-          rowsPerPage={ rowsPerPage }
-          isDetail
-        />
-        <TablePagination
-          labelRowsPerPage="N° de colunas"
-          rowsPerPageOptions={ rowsPerPageOption }
-          component="div"
-          count={ sale.products.length }
-          rowsPerPage={ rowsPerPage }
-          page={ page }
-          onPageChange={ handleChangePage }
-          onRowsPerPageChange={ handleChangeRowsPerPage }
-        />
-        <Typography
-          component="h1"
-          variant="h5"
-          sx={ { mb: 2 } }
-          data-testid={ testids[user.role].detailsOrderTotalPrice }
-        >
-          { `Total Price: ${calcTotal()}` }
-        </Typography>
-      </Grid>
-      { user.role === 'seller' ? (
-        <>
-          <Button
-            sx={ { mb: 2 } }
-            data-testid="seller_order_details__button-preparing-check"
-            disabled={ sale.status !== 'Pendente' }
-            onClick={ () => updateOrderStatus('Preparando') }
-          >
-            Preparar Pedido
-          </Button>
-          <Button
-            sx={ { mb: 2 } }
-            data-testid="seller_order_details__button-dispatch-check"
-            disabled={ sale.status !== 'Preparando' }
-            onClick={ () => updateOrderStatus('Em Trânsito') }
-          >
-            Saiu para entrega
-          </Button>
-        </>
-      ) : null }
-    </>
+        </Button>)
+        : (
+          <>
+            <Button
+              sx={ { mb: 2 } }
+              data-testid="seller_order_details__button-preparing-check"
+              disabled={ sale.status !== 'Pendente' }
+              onClick={ () => updateOrderStatus('Preparando') }
+            >
+              Preparar Pedido
+            </Button>
+            <Button
+              sx={ { mb: 2 } }
+              data-testid="seller_order_details__button-dispatch-check"
+              disabled={ sale.status !== 'Preparando' }
+              onClick={ () => updateOrderStatus('Em Trânsito') }
+            >
+              Saiu para entrega
+            </Button>
+          </>
+        )}
+      <CheckoutTable
+        filtered={ sale.products }
+        page={ page }
+        rowsPerPage={ rowsPerPage }
+        isDetail
+      />
+      <TablePagination
+        labelRowsPerPage="N° de colunas"
+        rowsPerPageOptions={ rowsPerPageOption }
+        component="div"
+        count={ sale.products.length }
+        rowsPerPage={ rowsPerPage }
+        page={ page }
+        onPageChange={ handleChangePage }
+        onRowsPerPageChange={ handleChangeRowsPerPage }
+      />
+      <Typography
+        component="h1"
+        variant="h5"
+        sx={ { mb: 2 } }
+        data-testid={ testids[user.role].detailsOrderTotalPrice }
+      >
+        { `Total Price: ${calcTotal()}` }
+      </Typography>
+    </Grid>
   );
 }
 

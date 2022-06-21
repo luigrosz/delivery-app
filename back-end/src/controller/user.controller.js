@@ -3,6 +3,8 @@ const { loginService,
   allSellersService,
   findUserByIdService,
   registerByAdminService,
+  allUsersService,
+  deleteUserService,
 } = require('../service/user.service');
 const jwtGenerator = require('../helpers/jwtGenerator');
 
@@ -56,12 +58,12 @@ const registerByAdminController = async (req, res, _next) => {
     const { email } = req.user;
     const user = await registerByAdminService(req.body, email);
     if (!user) {
-      return res.status(401).json({ error: 'Somente administradores podem fazer isso.' });
+      return res.status(409).json({ error: 'Somente administradores podem fazer isso.' });
     }
     if (typeof user === 'string') {
-      return res.status(401).json(user);
+      return res.status(409).json(user);
     }
-    return res.status(200).json(user);
+    return res.status(201).json(user);
   } catch (error) {
     throw new Error(error);
   }
@@ -76,10 +78,31 @@ const getAllSellers = async (_req, res, _next) => {
   }
 };
 
+const getAllUsers = async (_req, res, _next) => {
+  try {
+    const users = await allUsersService();
+    return res.status(200).json(users);
+  } catch (e) {
+    throw new Error(e);
+  }
+};
+
+const deletuserControllers = async (req, res, _next) => {
+  try {
+    const { email } = req.body;
+    const deletedUser = await deleteUserService(email);
+    return res.status(200).json(deletedUser);
+  } catch (e) {
+    throw new Error(e);
+  }
+};
+
 module.exports = {
   loginController,
   registerController,
   getAllSellers,
   registerByAdminController,
   findUserByIdController,
+  getAllUsers,
+  deletuserControllers,
 };

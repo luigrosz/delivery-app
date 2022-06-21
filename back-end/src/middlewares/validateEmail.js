@@ -7,7 +7,6 @@ function isValidEmail(email) {
 const validateEmail = async (req, res, next) => {
   try {
     const { email } = req.body;
-
     if (!isValidEmail(email)) {
       return res.status(400).json({ message: '"email" must be a valid email' });
     }

@@ -61,10 +61,30 @@ const allSellersService = async () => {
   }
 };
 
+const allUsersService = async () => {
+  try {
+    const allUsers = await users.findAll();
+    return allUsers;
+  } catch (e) {
+    throw new Error(e);
+  }
+};
+
+const deleteUserService = async (email) => {
+  try {
+    const user = await users.destroy({ where: { email } });
+    return user;
+  } catch (e) {
+    throw new Error(e);
+  }
+};
+
 module.exports = {
   registerService,
   loginService,
   allSellersService,
   findUserByIdService,
   registerByAdminService,
+  allUsersService,
+  deleteUserService,
 }; 

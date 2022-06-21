@@ -9,7 +9,7 @@ const validateJWT = async (req, res, next) => {
 
     const key = fs.readFileSync(`${process.cwd()}/jwt.evaluation.key`, 'utf8');
     try {
-     jwt.verify(authorization, key);
+      jwt.verify(authorization, key);
       const { data } = jwtDecode(authorization);
       const { email } = data;
       const isUserInDatabase = users.findOne({ where: { email } });
