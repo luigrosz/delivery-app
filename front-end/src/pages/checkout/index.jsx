@@ -125,7 +125,7 @@ function Checkout() {
         sx={ {
           display: 'flex',
           flexDirection: 'column',
-          width: '70vw',
+          width: { md: '70vw', xs: '100vw' },
         } }
       >
         <Box
@@ -140,7 +140,7 @@ function Checkout() {
           <Select
             native
             sx={ {
-              width: '20%',
+              width: { md: '20%', xs: '100%' },
             } }
             required
             label="Vendedor Responsável"
@@ -154,7 +154,7 @@ function Checkout() {
           </Select>
           <TextField
             sx={ {
-              width: '50%',
+              width: { md: '50%', xs: '100%' },
             } }
             required
             label="Endereço"
@@ -166,7 +166,7 @@ function Checkout() {
           <TextField
             label="Numero"
             sx={ {
-              width: '13%',
+              width: { md: '13%', xs: '100%' },
             } }
             required
             inputProps={ { 'data-testid': 'customer_checkout__input-addressNumber' } }

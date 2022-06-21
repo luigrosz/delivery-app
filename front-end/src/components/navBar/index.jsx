@@ -47,7 +47,7 @@ const NavBar = () => {
             Meus Pedidos
           </Button>
           <Box sx={ { flexGrow: 1 } } />
-          <Box sx={ { display: { xs: 'none', md: 'flex' } } }>
+          <Box sx={ { display: { md: 'flex' } } }>
             <Typography
               variant="h6"
               noWrap

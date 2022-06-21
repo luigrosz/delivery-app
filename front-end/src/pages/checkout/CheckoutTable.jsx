@@ -28,7 +28,7 @@ function CheckoutTable({ filtered, page, rowsPerPage, handleRemove, isDetail }) 
     <TableContainer
       component={ Paper }
       sx={ {
-        width: '70vw',
+        width: { md: '70vw', xs: '100vw' },
         maxHeight: 450,
       } }
     >
@@ -96,7 +96,7 @@ function CheckoutTable({ filtered, page, rowsPerPage, handleRemove, isDetail }) 
                     .toFixed(2).toString().replace('.', ',') }
                 </TableCell>
                 { (handleRemove)
-                  ? (
+                  && (
                     <TableCell
                       align="right"
                     >
@@ -111,8 +111,7 @@ function CheckoutTable({ filtered, page, rowsPerPage, handleRemove, isDetail }) 
                         Remover Item
                       </Button>
                     </TableCell>
-                  )
-                  : undefined}
+                  )}
               </TableRow>
             ))}
         </TableBody>

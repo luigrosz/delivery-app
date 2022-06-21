@@ -13,7 +13,7 @@ import { context } from '../../context';
 import AdminUserTable from './adminUserTable';
 
 const Admin = () => {
-  const { APIURL, setUser } = useContext(context);
+  const { APIURL, setUser, fetchUsers } = useContext(context);
   const [inputs, setInputs] = useState({ email: '', name: '', password: '', role: '' });
   const [isDisabled, setIsDisabled] = useState(false);
   const [alreadyExists, setAlreadyExists] = useState(false);
@@ -43,6 +43,7 @@ const Admin = () => {
       return setAlreadyExists(true);
     }
     setUser(data);
+    fetchUsers();
   };
 
   const handleClose = (e, reason) => {
