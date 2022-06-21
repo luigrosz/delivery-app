@@ -3,7 +3,7 @@ const { expect } = require("chai");
 const userService = require('../../service/user.service');
 const userController = require('../../controller/user.controller');
 
-describe('Teste sales controller', () => {
+describe('Teste users controller', () => {
   const request = {};
   const response = {};
 
@@ -19,7 +19,7 @@ describe('Teste sales controller', () => {
 
     it('login nao encontrado', async () => {
       request.body = {
-        email: "hello@hello.com",
+        email: "sadjinaskjd@dsadsa.com",
         password: "qwerty123"
       }
       await userController.loginController(request, response);
@@ -56,13 +56,12 @@ describe('Teste sales controller', () => {
     })
     it('registro com email já na database', async () => {
       request.body = {
-        name: "Jesus",
+        name: "Fulana Pereira",
         email: "fulana@deliveryapp.com",
         password: "fulana@123"
       }
-      await userController.registerController(request, response);
+      const a = await userController.registerController(request, response);
       expect(response.status.calledWith(409)).to.be.true;
-      expect(response).to.not.be.empty();
     })
   })
   describe('getAll sellers', async () => {
@@ -77,7 +76,7 @@ describe('Teste sales controller', () => {
 
     it('retorna todos os vendedores', async () => {
       await userController.getAllSellers(request, response);
-      expect(response.status.calledWith(201)).to.be.true;
+      expect(response.status.calledWith(200)).to.be.true;
     })
   })
 })

@@ -3,14 +3,18 @@ const {
   postSaleController,
   getAllSalesController,
   getSaleByIdSellerController,
-  getSaleByIdUserController } = require('../controller/sales.controller');
-const { validateJWT, validateObjects } = require('../middlewares');
+  getSaleByIdUserController,
+  getSaleByIdSaleController,
+  updateSaleStatusByIdController } = require('../controller/sales.controller');
+const { validateJWT, validateObjects, validateStatusMod } = require('../middlewares');
 
 const router = express.Router();
 
 router.get('/', validateJWT, getAllSalesController);
-router.get('/user/:id', validateJWT, getSaleByIdUserController);
+router.get('/customer/:id', validateJWT, getSaleByIdUserController);
 router.get('/seller/:id', validateJWT, getSaleByIdSellerController);
+router.get('/:id', validateJWT, getSaleByIdSaleController);
+router.patch('/:id/status', validateJWT, validateStatusMod, updateSaleStatusByIdController);
 router.post('/', validateObjects, validateJWT, postSaleController);
 
 module.exports = router;

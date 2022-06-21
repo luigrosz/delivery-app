@@ -29,7 +29,7 @@ describe('Teste sales controller', () => {
     beforeEach(async () => {
       sinon.stub(salesService, 'getSaleByIdSellerService');
       request.params = {
-        id: 1
+        id: 2
       };
       response.status = sinon.stub().returns(response);
       response.json = sinon.stub().returns();
@@ -65,7 +65,7 @@ describe('Teste sales controller', () => {
 
   describe('post sale', async () => {
     beforeEach(async () => {
-      sinon.stub(salesService, 'postSaleService');
+      sinon.stub(salesService, 'createSaleAndAll');
       request.body = {
         sellerId: 1,
         totalPrice: 2,
@@ -88,10 +88,9 @@ describe('Teste sales controller', () => {
       response.json = sinon.stub().returns();
     });
     afterEach(async () => {
-       salesService.postSaleService.restore();
+       salesService.createSaleAndAll.restore();
     })
     it('Retorna uma sale postada', async () => {
-      salesService.postSaleService.resolves(mock);
       await salesController.postSaleController(request, response);
       expect(response.status.calledWith(201)).to.be.true;
     })

@@ -5,7 +5,9 @@ export const context = createContext(null);
 
 const Provider = ({ children }) => {
   const [user, setUser] = useState({ });
+  const [sellers, setSellers] = useState([]);
   const [products, setProducts] = useState([]);
+  const [cart, setCart] = useState([]);
   const [totalPrice, setTotalPrice] = useState(0);
   const hostname = process.env.REACT_APP_HOSTNAME || 'localhost';
   const port = process.env.REACT_APP_BACKEND_PORT || '3001';
@@ -15,31 +17,34 @@ const Provider = ({ children }) => {
     const response = await fetch(`${APIURL}/product`);
     if (response.ok) {
       const data = await response.json();
-      const newD = data.map((product) => {
-        const newP = { ...product, urlImage: product.url_image };
-        delete newP.url_image;
-        return newP;
-      });
-      setProducts(newD);
+      setProducts(data);
     }
   }, [APIURL]);
 
+  const fetchSellers = useCallback(async () => {
+    const response = await fetch(`${APIURL}/seller`, {
+      headers: {
+        authorization: user.token,
+      },
+    });
+    if (response.ok) {
+      const data = await response.json();
+      setSellers(data);
+    }
+  }, [APIURL, user]);
+
   useEffect(() => {
-    const total = products.reduce((acc, product) => {
-      if (product?.quantity) {
-        return acc + (product.price * product.quantity);
-      }
-      return acc;
-    }, 0);
+    const total = cart.reduce((acc, item) => acc + (item.quantity * (+item.price)), 0);
     setTotalPrice(parseFloat(total).toFixed(2));
-  }, [products]);
+  }, [cart]);
 
   useEffect(() => {
     if (user.token) {
       localStorage.setItem('user', JSON.stringify(user));
       fetchProducts();
+      fetchSellers();
     }
-  }, [user, fetchProducts]);
+  }, [user, fetchProducts, fetchSellers]);
 
   useEffect(() => {
     const savedUser = localStorage.getItem('user');
@@ -47,14 +52,19 @@ const Provider = ({ children }) => {
       setUser(JSON.parse(savedUser));
     }
   }, []);
+
   const value = useMemo(() => ({
     APIURL,
     user,
     setUser,
     products,
     setProducts,
+    setTotalPrice,
     totalPrice,
-  }), [user, APIURL, products, totalPrice]);
+    sellers,
+    cart,
+    setCart,
+  }), [user, APIURL, products, totalPrice, sellers, cart]);
   return (
     <context.Provider value={ value }>
       { children }

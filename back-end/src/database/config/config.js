@@ -21,6 +21,9 @@ const options = {
   dialectOptions: {
     timezone: 'Z',
   },
+  define: {
+    timestamps: false,
+  },
   logging: false,
 };
 

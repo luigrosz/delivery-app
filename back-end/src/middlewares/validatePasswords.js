@@ -1,6 +1,10 @@
 const validatePassword = async (req, res, next) => {
   try {
     const { password } = req.body;
+    if (!password) {
+      return res.status(400)
+    .json({ message: '"password" must not be empty' });
+    }
     if (password.length > 5) {
       return next();
     }

@@ -1,65 +1,114 @@
-const { QueryTypes } = require('sequelize');
-const db = require('../database/models');
-const { users, sales } = require('../database/models');
-const { postSaleQuery,
-  now,
-  postSalesProductQuery,
-  noChecks,
-  userIdSnake,
-  sellerIdSnake,
-} = require('../helpers/dbHelper');
+const { users, sales, products, salesProducts } = require('../database/models');
+const { sellerIdSnake } = require('../helpers/dbHelper');
 
-async function createSalesProductsInDb(productsArr, saleId) {
-  const productsPromise = productsArr.map((product) => {
-    const result = db.sequelize.query(postSalesProductQuery, {
-      replacements: [product.id, saleId, product.quantity],
-      type: QueryTypes.INSERT,
+const createProductAssociation = async (itensSold, saleId) => {
+  const promises = await itensSold.map(async (prod) => {
+    await salesProducts.create({
+      saleId,
+      productId: prod.id,
+      quantity: prod.quantity,
     });
-    return result;
   });
+  Promise.all(promises);
+};
 
-  const result = await Promise.all(productsPromise);
-  return result;
-}
-
-const postSaleService = async (params, user) => {
-    const { sellerId, totalPrice, deliveryAddress, deliveryNumber, products } = params;
-    const { email } = user;
-    const { id } = await users.findOne({ where: { email } });
-
-    await db.sequelize.query(noChecks, { type: QueryTypes.UPDATE });
-    const saleQuery = await db.sequelize.query(postSaleQuery, {
-      replacements: [id, sellerId, totalPrice, deliveryAddress, deliveryNumber, now],
-      type: QueryTypes.INSERT,
+const createSaleAndAll = async (sale, user) => {
+  try {
+    const { id } = await users.findOne({
+      where: {
+        email: user.email,
+      },
     });
+    const saleId = await sales.create({
+      userId: id,
+      ...sale,
+      status: 'Pendente',
+      products: sale.products,
+    });
+    await createProductAssociation(sale.products, saleId.id);
+    return { saleId: saleId.id };
+  } catch (error) {
+    return error;
+  }
+};
 
-    const saleId = saleQuery[0];
-    await createSalesProductsInDb(products, saleId);
+const getProductsOfSale = async (saleId) => {
+  const productsId = await salesProducts.findAll({ where: {
+    saleId,
+  },
+  });
+  const response = await productsId.map(async ({ productId, quantity }) => {
+    const { id, name, price, urlImage } = await products.findOne({ where: { id: productId } });
+    return { id, name, price, urlImage, quantity };
+  });
+  const fetchedProducts = await Promise.all(response);
+  return fetchedProducts;
+};
 
-    const result = {
-      userId: id, sellerId, totalPrice, deliveryAddress, deliveryNumber, products,
-    };
-    return result;
+const filterSaleItens = (sale) => {
+  const {
+    id, customer, seller, totalPrice, deliveryAddress, deliveryNumber, status, saleDate,
+  } = sale;
+  return { id, customer, seller, totalPrice, deliveryAddress, deliveryNumber, status, saleDate };
+};
+
+const mapAllSales = async (allSales) => {
+  const promises = allSales.map(async (singleSales) => {
+    const prod = await getProductsOfSale(singleSales.id);
+    const filteredItens = filterSaleItens(singleSales);
+    return { ...filteredItens, products: prod };
+  });
+  const builtSales = await Promise.all(promises);
+  return builtSales;
 };
 
 const getAllSalesService = async () => {
-    const saleObject = await sales.findAll();
-    return saleObject;
+    const allSales = await sales.findAll({ include:
+      [{ model: users, as: 'customer', attributes: ['name'] },
+      { model: users, as: 'seller', attributes: ['name'] }] });
+    const mappedSales = mapAllSales(allSales);
+    return mappedSales;
 };
 
 const getSaleByIdSellerService = async (id) => {
-    const saleObject = await sales.findOne({ where: { [sellerIdSnake]: id } });
-    return saleObject;
+    const allSales = await sales.findAll({ where: { [sellerIdSnake]: id },
+      include: [{ model: users, as: 'customer', attributes: ['name'] },
+      { model: users, as: 'seller', attributes: ['name'] }] });
+      const mappedSales = mapAllSales(allSales);
+      return mappedSales;
 };
 
 const getSaleByIdUserService = async (id) => {
-    const saleObject = await sales.findOne({ where: { [userIdSnake]: id } });
-    return saleObject;
+    const allSales = await sales.findAll({ where: { userId: id },
+      include: [{ model: users, as: 'customer', attributes: ['name'] },
+      { model: users, as: 'seller', attributes: ['name'] }] });
+    const mappedSales = mapAllSales(allSales);
+    return mappedSales;
+};
+
+const getSaleByIdSaleService = async (id) => {
+    const saleObject = await sales.findOne({ where: { id },
+      include: [{ model: users, as: 'customer', attributes: ['name'] },
+      { model: users, as: 'seller', attributes: ['name'] }] });
+    const prod = await getProductsOfSale(saleObject.id);
+    const filteredItens = filterSaleItens(saleObject);
+    return { ...filteredItens, products: prod };
+};
+
+const updateSaleStatusByIdService = async (id, status) => {
+    const updatedSale = await sales.update({ status }, {
+      where: { 
+        id,
+      },
+    }); 
+    return updatedSale;
 };
 
 module.exports = {
-  postSaleService,
   getAllSalesService,
   getSaleByIdUserService,
   getSaleByIdSellerService,
+  getSaleByIdSaleService,
+  updateSaleStatusByIdService,
+  createSaleAndAll,
 };

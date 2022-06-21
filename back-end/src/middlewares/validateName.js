@@ -1,6 +1,9 @@
 const validateName = async (req, res, next) => {
   try {
     const { name } = req.body;
+    if (!name) {
+      return res.status(400).json({ message: '"name" must not be empty' });
+    }
     if (name.length > 11) {
       return next();
     }
@@ -8,6 +11,6 @@ const validateName = async (req, res, next) => {
   } catch (e) {
     throw new Error(e);
   }
-}; 
+};
 
 module.exports = validateName;
