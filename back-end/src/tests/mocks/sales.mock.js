@@ -39,6 +39,7 @@ const getBySellerId = {
 	"user_id": 1
 }
 
+
 module.exports = {
   getAll,
   getByUserId,

@@ -1,4 +1,3 @@
-const md5 = require('md5');
 const { QueryTypes } = require('sequelize');
 const db = require('../database/models');
 const { users, sales } = require('../database/models');
@@ -24,10 +23,9 @@ async function createSalesProductsInDb(productsArr, saleId) {
 }
 
 const postSaleService = async (params, user) => {
-  try {
     const { sellerId, totalPrice, deliveryAddress, deliveryNumber, products } = params;
-    const { email, password } = user;
-    const { id } = await users.findOne({ where: { email, password: md5(password) } });
+    const { email } = user;
+    const { id } = await users.findOne({ where: { email } });
 
     await db.sequelize.query(noChecks, { type: QueryTypes.UPDATE });
     const saleQuery = await db.sequelize.query(postSaleQuery, {
@@ -42,36 +40,21 @@ const postSaleService = async (params, user) => {
       userId: id, sellerId, totalPrice, deliveryAddress, deliveryNumber, products,
     };
     return result;
-  } catch (error) {
-    throw new Error(error);
-  }
 };
 
 const getAllSalesService = async () => {
-  try {
     const saleObject = await sales.findAll();
     return saleObject;
-  } catch (error) {
-    throw new Error(error);
-  }
 };
 
 const getSaleByIdSellerService = async (id) => {
-  try {
     const saleObject = await sales.findOne({ where: { [sellerIdSnake]: id } });
     return saleObject;
-  } catch (error) {
-    throw new Error(error);
-  }
 };
 
 const getSaleByIdUserService = async (id) => {
-  try {
     const saleObject = await sales.findOne({ where: { [userIdSnake]: id } });
     return saleObject;
-  } catch (error) {
-    throw new Error(error);
-  }
 };
 
 module.exports = {

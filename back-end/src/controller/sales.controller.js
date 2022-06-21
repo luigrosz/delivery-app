@@ -15,7 +15,6 @@ const postSaleController = async (req, res, _next) => {
 };
 
 const getSaleByIdUserController = async (req, res, _next) => {
-
     const { id } = req.params;
     const sales = await getSaleByIdSellerService(id);
     if (sales === null) {

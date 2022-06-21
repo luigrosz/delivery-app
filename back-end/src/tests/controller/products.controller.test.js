@@ -67,25 +67,4 @@ describe('Teste products controller', () => {
       expect(response.status.calledWith(204)).to.be.true;
     })
   })
-
-  // describe('delete', async () => {
-  //   beforeEach(async () => {
-  //     request.params = {
-  //       id: 1
-  //     };
-  //     sinon.stub(productsService, 'deleteProductService');
-  //     response.status = sinon.stub().returns(response);
-  //     response.json = sinon.stub().returns();
-  //   } );
-  //   afterEach(async () => {
-  //     productsService.deleteProductService.restore();
-  //   })
-
-  //   it('Retorna um produto deletado', async () => {
-  //     console.log("aaaa");
-  //     productsService.deleteProductService.resolves(mock.deleteResponse);
-  //     await productsController.delprodController(request, response);
-  //     expect(response.status.calledWith(204)).to.be.true;
-  //   })
-  // })
 })

@@ -13,7 +13,7 @@ describe('Teste sales controller', () => {
       sinon.stub(salesService, 'getAllSalesService');
       response.status = sinon.stub().returns(response);
       response.json = sinon.stub().returns();
-    } );
+    });
     afterEach(async () => {
       salesService.getAllSalesService.restore();
     })
@@ -25,82 +25,75 @@ describe('Teste sales controller', () => {
     })
   })
 
-  // describe('post', async () => {
-  //   beforeEach(async () => {
-  //     sinon.stub(salesService, 'postSaleService');
-  //     request.params = {
-  //       id: 1
-  //     };
-  //     request.body = {
-  //         sellerId: 1,
-  //         totalPrice: 1,
-  //       deliveryAddres: "a",
-  //       deliveryNumber: 1,
-  //       products: [
-  //         {
-  //           id: 1,
-  //           quantity: 1
-  //         }
-  //        ]
-  //     }
-  //     request.user = {
-  //       email: "hello@hello.com"
-  //     }
-  //     response.status = sinon.stub().returns(response);
-  //     response.json = sinon.stub().returns();
-  //   } );
-  //   afterEach(async () => {
-  //      salesService.postSaleService.restore();
-  //   })
-  //   it('Retorna uma sale postada', async () => {
-  //     salesService.postSaleService.resolves({});
-  //     await salesController.postSaleController(request, response);
-  //     expect(response.status.calledWith(201)).to.be.true;
-  //   })
-  // })
+  describe('getByIdSeller', async () => {
+    beforeEach(async () => {
+      sinon.stub(salesService, 'getSaleByIdSellerService');
+      request.params = {
+        id: 1
+      };
+      response.status = sinon.stub().returns(response);
+      response.json = sinon.stub().returns();
+    });
+    afterEach(async () => {
+       salesService.getSaleByIdSellerService.restore();
+    })
+    it('Retorna uma sale pelo id do vendedor', async () => {
+      salesService.getSaleByIdSellerService.resolves(mock.getBySellerId);
+      await salesController.getSaleByIdSellerController(request, response);
+      expect(response.status.calledWith(200)).to.be.true;
+    })
+  })
 
-  // describe('edit', async () => {
-  //   beforeEach(async () => {
-  //     sinon.stub(productsService, 'editProductService');
-  //     request.body = {
-  //       name: 'a',
-  //       price: '2'
-  //     };
-  //     request.params = {
-  //       id: 1
-  //     };
-  //     response.status = sinon.stub().returns(response);
-  //     response.json = sinon.stub().returns();
-  //   } );
-  //   afterEach(async () => {
-  //     productsService.editProductService.restore();
-  //   })
+  describe('getByIdUser', async () => {
+    beforeEach(async () => {
+      sinon.stub(salesService, 'getSaleByIdUserService');
+      request.params = {
+        id: 1
+      };
+      response.status = sinon.stub().returns(response);
+      response.json = sinon.stub().returns();
+    });
+    afterEach(async () => {
+       salesService.getSaleByIdUserService.restore();
+    })
+    it('Retorna uma sale pelo id do comprador', async () => {
+      salesService.getSaleByIdUserService.resolves(mock.getByUserId);
+      await salesController.getSaleByIdUserController(request, response);
+      expect(response.status.calledWith(200)).to.be.true;
+    })
+  })
 
-  //   it('Retorna um produto editado', async () => {
-  //     productsService.editProductService.resolves(mock.updateResponse);
-  //     await productsController.editProdController(request, response);
-  //     expect(response.status.calledWith(204)).to.be.true;
-  //   })
-  // })
-
-  // describe('delete', async () => {
-  //   beforeEach(async () => {
-  //     request.params = {
-  //       id: 1
-  //     };
-  //     sinon.stub(productsService, 'deleteProductService');
-  //     response.status = sinon.stub().returns(response);
-  //     response.json = sinon.stub().returns();
-  //   } );
-  //   afterEach(async () => {
-  //     productsService.deleteProductService.restore();
-  //   })
-
-  //   it('Retorna um produto deletado', async () => {
-  //     console.log("aaaa");
-  //     productsService.deleteProductService.resolves(mock.deleteResponse);
-  //     await productsController.delprodController(request, response);
-  //     expect(response.status.calledWith(204)).to.be.true;
-  //   })
-  // })
+  describe('post sale', async () => {
+    beforeEach(async () => {
+      sinon.stub(salesService, 'postSaleService');
+      request.body = {
+        sellerId: 1,
+        totalPrice: 2,
+        deliveryAddress: "av 1",
+        deliveryNumber: 2,
+        products: [
+          {
+            id: 1,
+            quantity: 2
+          }
+        ]
+      };
+      request.user = {
+        email: "fulana@deliveryapp.com",
+      }
+      request.params = {
+        id: 1
+      };
+      response.status = sinon.stub().returns(response);
+      response.json = sinon.stub().returns();
+    });
+    afterEach(async () => {
+       salesService.postSaleService.restore();
+    })
+    it('Retorna uma sale postada', async () => {
+      salesService.postSaleService.resolves(mock);
+      await salesController.postSaleController(request, response);
+      expect(response.status.calledWith(201)).to.be.true;
+    })
+  })
 })
